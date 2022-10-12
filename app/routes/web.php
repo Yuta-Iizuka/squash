@@ -12,5 +12,13 @@ use App\Http\Controllers\ReservationController;
 |
 */
 
-Route::get('/' ,[ReservationController::class, 'index']);
-Route::get('/gym/{information}/show', [ReservationController::class, 'show'])->name('gym.show');
+Auth::routes();
+
+Route::group(['middleware' => 'auth'], function(){
+
+
+    Route::get('/' ,[ReservationController::class, 'index']);
+    Route::get('/gym/{id}/show', [ReservationController::class, 'show'])->name('gym.show');
+
+    Route::get('/gym/{id}/reserve', [ReservationController::class, 'reserve'])->name('gym.reserve');
+});

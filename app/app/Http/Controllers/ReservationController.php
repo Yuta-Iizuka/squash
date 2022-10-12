@@ -55,16 +55,14 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Information $information)
+    public function show($id)
     {
-       
+        $information= new Information;
 
-        $all = $information->get()->toArray();
-
-        var_dump($all);
+        $all = Information::where('id', '=', $id)->get()->toArray();
 
         return view('gym_detail',[
-            'informations' => $all,
+            'info' => $all,
         ]);
     }
 
@@ -101,4 +99,19 @@ class ReservationController extends Controller
     {
         //
     }
+
+
+    public function reserve($id)
+    {
+        $information= new Information;
+
+        $all = Information::where('id', '=', $id)->get()->toArray();
+
+        return view('gym_reserve_list',[
+            'info' => $all,
+            'terms' => config('const.term'),
+        ]);
+    }
+
+
 }
