@@ -21,6 +21,10 @@
                 <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}" />
               </div>
               <div class="form-group">
+                <label for="tel">電話番号</label>
+                <input type="tel" class="form-control" id="tel" name="tel" value="{{ old('tel') }}" />
+              </div>
+              <div class="form-group">
                 <label for="name">ユーザー名</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" />
               </div>
@@ -32,6 +36,11 @@
                 <label for="password-confirm">パスワード（確認）</label>
                 <input type="password" class="form-control" id="password-confirm" name="password_confirmation">
               </div>
+              <div class="form-group">
+                <!-- <label for="division">区分</label> -->
+                <input type="hidden" class="form-control" id="division" name="division" value="0" />
+              </div>
+
               <div class="text-right">
                 <button type="submit" class="btn btn-primary">送信</button>
               </div>

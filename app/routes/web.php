@@ -16,6 +16,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function(){
 
+    // Route::get('/admin', 'AdminController@index')->name('admin');
 
     Route::get('/' ,[ReservationController::class, 'index']);
     Route::get('/gym/{id}/show', [ReservationController::class, 'show'])->name('gym.show');
