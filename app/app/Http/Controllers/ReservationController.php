@@ -8,6 +8,8 @@ use App\Information;
 
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Auth;
+
 class ReservationController extends Controller
 {
     /**
@@ -135,14 +137,16 @@ class ReservationController extends Controller
     public function createUserReserve(Request $request,$userId, $infoId, $term)
     {
         $date = $request->date;
+        $user = Auth::user()->first();
         $info = Information::where('id',$infoId)->first();
         $config_term = config('const.term');
-        var_dump($date);
+
         return view('gym_reserve_registration',[
             'info' => $info,
             'userId' => $userId,
             'term' => $config_term[$term],
             'date' => $date,
+            'user' => $user,
         ]);
     }
 
