@@ -23,6 +23,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/' ,[ReservationController::class, 'index']);
     Route::get('/gym/{id}/show', [ReservationController::class, 'show'])->name('gym.show');
 
-    Route::get('/gym/{id}/reserve', [ReservationController::class, 'reserve'])->name('gym.reserve');
+    Route::get('/gym/{id}/carender', [ReservationController::class, 'carender'])->name('gym.carender');
+
+    Route::post('/gym/{id}/reserve', [ReservationController::class, 'reserve'])->name('gym.reserve');
     Route::get('/user/{userId}/reserve/{infoId}/{term}', [ReservationController::class, 'createUserReserve'])->name('reserve.create.user');
 });

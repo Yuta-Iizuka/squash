@@ -100,10 +100,22 @@ class ReservationController extends Controller
         //
     }
 
-
-    public function reserve($id)
+    public function carender($id)
     {
 
+        $all = Information::where('id', '=', $id)
+                            ->first();
+
+        return view('gym_carender',[
+            'info' => $all,
+        ]);
+    }
+
+
+
+    public function reserve(Request $request,$id)
+    {
+        $date = $request['date'];
         $all = Information::join('times', 'times.id', '=', 'informations.time_id')
                             ->where('informations.id', '=', $id)
                             ->first();
@@ -111,19 +123,29 @@ class ReservationController extends Controller
         return view('gym_reserve_list',[
             'info' => $all,
             'terms' => config('const.term'),
+            'date' => $date,
         ]);
     }
 
-    public function createUserReserve($userId, $infoId, $term)
+
+
+
+
+
+    public function createUserReserve(Request $request,$userId, $infoId, $term)
     {
+        $date = $request->date;
         $info = Information::where('id',$infoId)->first();
         $config_term = config('const.term');
+        var_dump($date);
         return view('gym_reserve_registration',[
             'info' => $info,
             'userId' => $userId,
             'term' => $config_term[$term],
+            'date' => $date,
         ]);
     }
 
+    
 
 }

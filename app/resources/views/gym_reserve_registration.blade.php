@@ -6,7 +6,7 @@
 
     <form action="" method="POST">
         @csrf
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="name">氏名</label>
             <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" />
         </div>
@@ -17,10 +17,10 @@
         <div class="form-group">
             <label for="email">メールアドレス</label>
             <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}" />
-        </div>
+        </div> -->
         <div class="form-group">
             <label for="date">予約日</label>
-            <input type="date" class="form-control" id="date" name="date" value="{{ old('date') }}"/>
+            <input type="date" class="form-control" id="date" name="date" value="{{ $date }}"/>
         </div>
         <div class="form-group">
             <label for="term">予約時間</label>

@@ -18,7 +18,7 @@
                     <a href="{{ route('gym.show', ['id' => $info['id']]) }}">施設詳細</a>
                 </th>
                 <th scope='col'>
-                    <a href="{{ route('gym.reserve', ['id' => $info['id']]) }}">予約する</a>
+                    <a href="{{ route('gym.carender', ['id' => $info['id']]) }}">予約する</a>
                 </th>
             </tr>
             @endforeach
