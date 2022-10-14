@@ -103,13 +103,25 @@ class ReservationController extends Controller
 
     public function reserve($id)
     {
-        $information= new Information;
 
-        $all = Information::where('id', '=', $id)->get()->toArray();
+        $all = Information::join('times', 'times.id', '=', 'informations.time_id')
+                            ->where('informations.id', '=', $id)
+                            ->first();
 
         return view('gym_reserve_list',[
             'info' => $all,
             'terms' => config('const.term'),
+        ]);
+    }
+
+    public function createUserReserve($userId, $infoId, $term)
+    {
+        $info = Information::where('id',$infoId)->first();
+        $config_term = config('const.term');
+        return view('gym_reserve_registration',[
+            'info' => $info,
+            'userId' => $userId,
+            'term' => $config_term[$term],
         ]);
     }
 
