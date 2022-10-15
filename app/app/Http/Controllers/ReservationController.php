@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Information;
 
+use App\Reserve;
+
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +39,7 @@ class ReservationController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -48,7 +50,16 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $reserving = new Reserve;
+
+        $columns = ['information_id', 'date',  'user_id', 'name', 'tel', 'email', 'member','term'];
+        foreach($columns as $column){
+             $reserving->$column = $request->$column;
+        }
+
+        $reserving->save();
+
+        return view('gym_reserve_complete');
     }
 
     /**
@@ -99,7 +110,7 @@ class ReservationController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 
     public function carender($id)
@@ -120,7 +131,7 @@ class ReservationController extends Controller
         $date = $request['date'];
         $all = Information::join('times', 'times.id', '=', 'informations.time_id')
                             ->where('informations.id', '=', $id)
-                            ->first();
+                            ->first();                  
 
         return view('gym_reserve_list',[
             'info' => $all,
@@ -129,27 +140,55 @@ class ReservationController extends Controller
         ]);
     }
 
-
-
-
-
-
-    public function createUserReserve(Request $request,$userId, $infoId, $term)
+    public function createUserReserve($userId, $infoId, $date, $term )
     {
-        $date = $request->date;
-        $user = Auth::user()->first();
+        $user = Auth::user();
         $info = Information::where('id',$infoId)->first();
         $config_term = config('const.term');
+      
 
         return view('gym_reserve_registration',[
             'info' => $info,
             'userId' => $userId,
             'term' => $config_term[$term],
-            'date' => $date,
             'user' => $user,
+            'date' => $date,
         ]);
     }
 
+// ユーザーのマイページ（キャンセルできるところ）
+    public function userMypage()
+    {
+        $information= new Information;
+
+        $reserve = Reserve::where('user_id', '=', \Auth::user()->id)->get();
+
+        return view('user_mypage',[
+            'reservation' => $reserve,
+        ]);
+    }
+
+    // ユーザーのマイページ→キャンセル確認へ
+    public function reserveDelete($id)
+    {
+
+        $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
+                            ->where('reserves.id', '=', $id)
+                            ->first();                
+
+        return view('gym_reserve_delete',[
+            'reservation' => $reserve,
+            'reserve_id' => $id,
+        ]);
+    }
     
+    // キャンセル実施
+    public function deleteComplete(Request $request,$id)
+    {
+        $reserve = Reserve::find($id);
+
+        $reserve->delete();
+        return view('reserve_delete_complete');
+    }
 
 }

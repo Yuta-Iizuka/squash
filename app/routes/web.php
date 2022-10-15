@@ -26,5 +26,10 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/gym/{id}/carender', [ReservationController::class, 'carender'])->name('gym.carender');
 
     Route::post('/gym/{id}/reserve', [ReservationController::class, 'reserve'])->name('gym.reserve');
-    Route::get('/user/{userId}/reserve/{infoId}/{term}', [ReservationController::class, 'createUserReserve'])->name('reserve.create.user');
+    Route::get('/user/{userId}/reserve/{infoId}/{date}/{term}', [ReservationController::class, 'createUserReserve'])->name('reserve.create.user');
+
+    Route::get('/user/mypage' ,[ReservationController::class, 'userMypage'])->name('user.mypage');
+    Route::get('/reserve/{id}/delete' ,[ReservationController::class, 'reserveDelete'])->name('reserve.delete');
+
+    Route::post('/delete/{id}/complete' ,[ReservationController::class, 'deleteComplete'])->name('delete.complete');
 });

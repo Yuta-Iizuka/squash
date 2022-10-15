@@ -24,6 +24,8 @@
             @endforeach
 
     </table>
+
+    <a href="{{ route('user.mypage') }}">マイページへ</a>
 </body>
 </html>
 

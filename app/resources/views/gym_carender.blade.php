@@ -12,7 +12,7 @@
         </div>
 
         <div class="text-right">
-        <button type="submit" class="btn btn-primary">日付を選択する</button>
+            <button type="submit" class="btn btn-primary">日付を選択する</button>
         </div>
     </form>
     </body>
