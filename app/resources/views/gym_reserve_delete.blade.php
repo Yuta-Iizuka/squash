@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('content')
-
-<form action="{{route('delete.complete', ['id' => $reserve_id]) }}" method="POST">
+<div class="container">
+    <form action="{{route('delete.complete', ['id' => $reserve_id]) }}" method="POST">
         @csrf
         <div class="form-group">
             <label for="information_name">施設名</label>
@@ -30,10 +30,9 @@
 
         <div class="text-right">
         <button type="submit" class="btn btn-primary">キャンセル</button>
-        </div>
+       
     </form>
-
-
+</div>
 </body>
 </html>
 

@@ -8,6 +8,8 @@ use App\Information;
 
 use App\Reserve;
 
+use App\User;
+
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +25,10 @@ class ReservationController extends Controller
     {
         $information= new Information;
 
-        $all = $information->all()->toArray();
+        $all = $information
+                ->where('check_id', '=', 0)
+                ->get()
+                ->toArray();
 
         return view('user_home',[
             'informations' => $all,
@@ -190,5 +195,40 @@ class ReservationController extends Controller
         $reserve->delete();
         return view('reserve_delete_complete');
     }
+    
+    // 施設の新規登録ページへ
+    public function gymCreate()
+    {
+        return view('gym_create');
+    }
 
+    // 施設のユーザー新規登録
+    public function newGymCreate(Request $request)
+    {
+        $users = new User;
+
+        $columns = ['name', 'tel',  'email', 'password', 'division'];
+        foreach($columns as $column){
+            $users->$column = $request->$column;
+        }
+
+        $users->save();
+
+        return view('gym_create_info');
+    }
+
+    // 施設情報の新規登録
+    public function infoNewGymCreate(Request $request)
+    {
+        $info = new Information;
+
+        $columns = ['event_id','time_id','name', 'prif','city','adress','station',  'access','tel', 'holiday', 'start_time','end_time','price','lat','lng','check_id',];
+        foreach($columns as $column){
+            $info->$column = $request->$column;
+        }
+
+        $info->save();
+
+        return view('gym_create_complete');
+    }
 }

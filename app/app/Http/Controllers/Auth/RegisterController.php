@@ -72,4 +72,5 @@ class RegisterController extends Controller
             'division' => $data['division'],
         ]);
     }
+    
 }

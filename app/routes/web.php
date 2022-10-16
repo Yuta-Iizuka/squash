@@ -14,6 +14,9 @@ use App\Http\Controllers\ReservationController;
 
 Auth::routes();
 
+Route::get('/gym/create', [ReservationController::class, 'gymCreate'])->name('gym.create');
+Route::post('/new/gym/create', [ReservationController::class, 'newGymCreate'])->name('new.gym.create');
+Route::post('/new/gym/create/info', [ReservationController::class, 'infoNewGymCreate'])->name('info.new.gym.create');
 
 Route::group(['middleware' => 'auth'], function(){
     Route::resource('reserve', 'ReservationController');

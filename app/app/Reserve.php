@@ -12,4 +12,6 @@ class Reserve extends Model
         return $this->belongsTo('App\Information', 'id', 'information_id' );
     }
 
+
+
 }

@@ -1,9 +1,8 @@
 
 @extends('layouts.layout')
 @section('content')
+<div class="container">
     <h2> {{ $info->name}} </h2>
-
-
     <form action="{{route('reserve.store') }}" method="POST">
         @csrf
         <div class="form-group">
@@ -49,7 +48,8 @@
         <button type="submit" class="btn btn-primary">送信</button>
         </div>
     </form>
-
+    <a href="{{ url()->previous() }}" >戻る</a>
+    </div>
     
 </body>
 </html>

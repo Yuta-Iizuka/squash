@@ -32,6 +32,9 @@
         <div class="text-center">
           <a href="{{ route('password.request') }}">パスワードの変更はこちらから</a>
         </div>
+        <div class="text-center">
+          <a href="{{ route('gym.create') }}">施設の申請はこちらから</a>
+        </div>
       </div>
     </div>
   </div>
