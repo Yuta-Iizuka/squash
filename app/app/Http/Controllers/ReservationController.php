@@ -23,6 +23,22 @@ class ReservationController extends Controller
      */
     public function index()
     {
+        $id = Auth::id();
+
+        $user = User::find($id);
+        var_dump($user);            
+
+        if($user->division == 1){
+            if(empty($user->info->id)){
+                return view('gym_create_info');
+            }else{
+                return view('gym_home');
+            }
+            
+        }else{
+            unset($user);
+        }
+
         $information= new Information;
 
         $all = $information
@@ -220,6 +236,8 @@ class ReservationController extends Controller
     // 施設情報の新規登録
     public function infoNewGymCreate(Request $request)
     {
+        $user = Auth::id();
+
         $info = new Information;
 
         $columns = ['event_id','time_id','name', 'prif','city','adress','station',  'access','tel', 'holiday', 'start_time','end_time','price','lat','lng','check_id',];
@@ -229,6 +247,16 @@ class ReservationController extends Controller
 
         $info->save();
 
+        $info->user()->attach($user);
+
+
+
         return view('gym_create_complete');
+    }
+
+    // 施設管理者のホーム
+    public function gymHome()
+    {
+        return view('gym_home');
     }
 }

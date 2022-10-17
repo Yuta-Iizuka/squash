@@ -72,5 +72,14 @@ class RegisterController extends Controller
             'division' => $data['division'],
         ]);
     }
+
+    // public function redirectPath()
+    // {
+
+    //     if($_POST["division"] == 1){
+    //         return '/new/gym/create/info';
+    //     }
+    //         return '/';
+    // }
     
 }
