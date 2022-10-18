@@ -8,7 +8,8 @@
                         <th scope='col'>施設名</th>
                         <th scope='col'>予約日</th>
                         <th scope='col'>予約時間</th>
-                        <th scope='col'>キャンセル</th>
+                        <th scope='col'></th>
+                        <th scope='col'></th>
                     </tr>
                 </thead>
                     @foreach($reservation as $res)
@@ -18,6 +19,9 @@
                         <th scope='col'>{{ $res['term']}}</th>
                         <th scope='col'>
                             <a href="{{ route('reserve.delete', ['id' => $res['id']]) }}">キャンセル</a>
+                        </th>
+                        <th scope='col'>
+                            <a href="{{ route('reserve.edit', ['id' => $res['id']]) }}">変更</a>
                         </th>
                 </tr>
                 @endforeach

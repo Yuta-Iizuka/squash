@@ -65,7 +65,7 @@
             <input type="text" class="form-control" id="lng" name="lng">
         </div>
         <div class="form-group">
-            <label for="check_id">内容チェック</label>
+            <!-- <label for="check_id">内容チェック</label> -->
             <input type="hidden" class="form-control" id="check_id" name="check_id" value="1" />
         </div>
         <div class="text-right">

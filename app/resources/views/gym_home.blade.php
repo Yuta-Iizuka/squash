@@ -1,16 +1,13 @@
 @extends('layouts.layout')
 @section('content')
-    <table class='table'>
-            <tr>
-                <th scope='col'>予約状況確認</th>
-                <th scope='col'></th>
-            </tr>
-            <tr>
-                <th scope='col'>施設情報編集</th>
-                <th scope='col'></th>
-            </tr>
-
-    </table>
+<div class="container">
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action">イベント新規登録</a>
+        <a href="#" class="list-group-item list-group-item-action">予約状況確認</a>
+        <a href="#" class="list-group-item list-group-item-action">施設情報編集</a>
+        <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">A disabled link item</a>
+    </div>
+</div>
 </body>
 </html>
 

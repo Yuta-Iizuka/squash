@@ -25,30 +25,37 @@ class ReservationController extends Controller
     {
         $id = Auth::id();
 
-        $user = User::find($id);
-        var_dump($user);            
+        $user = User::find($id);   
+        
+        $information= new Information;
 
         if($user->division == 1){
-            if(empty($user->info->id)){
+            if(empty($user->info)){
                 return view('gym_create_info');
             }else{
                 return view('gym_home');
             }
             
+        }else if($user->division == 2){
+            $all = $information
+            ->where('check_id', '=', 1)
+            ->get()
+            ->toArray();
+
+            return view('admin_home',[
+                'admin' => $all,
+            ]);
         }else{
             unset($user);
         }
-
-        $information= new Information;
-
-        $all = $information
+            $all = $information
                 ->where('check_id', '=', 0)
                 ->get()
                 ->toArray();
-
-        return view('user_home',[
-            'informations' => $all,
-        ]);
+        
+            return view('user_home',[
+                'informations' => $all,
+            ]);
 
 
     }
@@ -108,7 +115,14 @@ class ReservationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
+                            ->where('reserves.id', '=', $id)
+                            ->first();                
+
+        return view('reserve_edit',[
+        'reservation' => $reserve,
+        'reserve_id' => $id,
+        ]);
     }
 
     /**
@@ -120,7 +134,9 @@ class ReservationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return view('reserve_edit_complete',[
+ 
+            ]);
     }
 
     /**
@@ -259,4 +275,28 @@ class ReservationController extends Controller
     {
         return view('gym_home');
     }
+
+    // 施設管理者のホーム→施設オーダーの詳細へ
+    public function adminGymOrder($id)
+    {
+        $all = Information::where('id', '=', $id)->get()->toArray();
+
+        return view('admin_gym_order',[
+            'admin' => $all,
+        ]);
+    }
+
+    public function adminGymOrderComplete(Request $request,$id)
+    {
+        $record = Information::find($id);
+
+        $record->check_id = '0';
+
+        $record->save();
+        
+        return view('admin_gym_order_complete');
+    }
+
+
+
 }
