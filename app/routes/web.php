@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/gym/{id}/reserve', [ReservationController::class, 'reserve'])->name('gym.reserve');
         Route::get('/user/{userId}/reserve/{infoId}/{date}/{term}', [ReservationController::class, 'createUserReserve'])->name('reserve.create.user');
     
+        // マイページ
         Route::get('/user/mypage' ,[ReservationController::class, 'userMypage'])->name('user.mypage');
         Route::get('/reserve/{id}/delete' ,[ReservationController::class, 'reserveDelete'])->name('reserve.delete');
         Route::post('/delete/{id}/complete' ,[ReservationController::class, 'deleteComplete'])->name('delete.complete');
@@ -50,6 +51,17 @@ Route::group(['middleware' => 'auth'], function(){
         
         Route::get('/admin/{id}/gym/order' ,[ReservationController::class, 'adminGymOrder'])->name('admin.gym.order');
         Route::post('/admin/{id}/gym/order/complete' ,[ReservationController::class, 'adminGymOrderComplete'])->name('admin.gym.order.complete');
+
+        // 施設側イベント登録
+        Route::get('/event/create', [ReservationController::class, 'eventCreate'])->name('event.create');
+        Route::post('/event/create/complete', [ReservationController::class, 'eventCreateComplete'])->name('event.create.complete');
+
+        // 施設側イベント編集
+        Route::get('/event/list', [ReservationController::class, 'eventList'])->name('event.list');
+        Route::get('/event/{id}/edit', [ReservationController::class, 'eventEdit'])->name('event.edit');
+        Route::post('/event/{id}/edit/complete', [ReservationController::class, 'eventEditComplete'])->name('event.edit.complete');
+
+
 
 
 

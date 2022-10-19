@@ -10,6 +10,10 @@ use App\Reserve;
 
 use App\User;
 
+use App\InformationUser;
+
+use App\Event;
+
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
@@ -25,12 +29,12 @@ class ReservationController extends Controller
     {
         $id = Auth::id();
 
-        $user = User::find($id);   
-        
         $information= new Information;
 
+        $user = User::find($id);   
+        
         if($user->division == 1){
-            if(empty($user->info)){
+            if(empty($user->info[0]->id)){
                 return view('gym_create_info');
             }else{
                 return view('gym_home');
@@ -196,12 +200,17 @@ class ReservationController extends Controller
 // ユーザーのマイページ（キャンセルできるところ）
     public function userMypage()
     {
-        $information= new Information;
+        $reserve = Reserve::where('user_id', '=', \Auth::user()->id)
+                            ->get();
 
-        $reserve = Reserve::where('user_id', '=', \Auth::user()->id)->get();
+        $information= Information::join('reserves', 'reserves.information_id', '=', 'informations.id')
+                                    ->where('reserves.user_id', '=', \Auth::user()->id)
+                                    ->select('informations.name')
+                                    ->first();       
 
         return view('user_mypage',[
             'reservation' => $reserve,
+            'info' => $information,
         ]);
     }
 
@@ -296,6 +305,78 @@ class ReservationController extends Controller
         
         return view('admin_gym_order_complete');
     }
+
+    public function eventCreate()
+    {
+        $user = Auth::user();
+        $id = $user->info[0]->id;
+        $information = new Information;
+        return view('event_create',[
+            'id' => $id,
+            'info' => $information,
+        ]);
+    }
+    
+    public function eventCreateComplete(Request $request)
+    {
+        $event = new Event;
+
+        $columns = ['information_id','date','event_name'];
+        foreach($columns as $column){
+            $event->$column = $request->$column;
+        }
+
+        $event->save();
+        
+        return view('event_create_complete');
+    }
+
+    // イベント編集トップ
+    public function eventList()
+    {
+        $user = Auth::user();
+        $id = $user->info[0]->id;
+
+        $event = Event::where('information_id', '=', $id)
+                        ->get()
+                        ->toArray();
+       
+
+        return view('event_list',[
+            'events' => $event,
+
+        ]);
+    }
+
+        // イベント編集ページへ
+        public function eventEdit($id)
+        {
+            $event = Event::where('id', '=', $id)
+                            ->get()
+                            ->toArray();
+
+             return view('event_edit',[
+                'events' => $event,
+            ]);
+        }
+
+        public function eventEditComplete(Request $request,$id)
+        {
+            $event = new Event;
+            $record = $event->find($id);
+
+            $columns = ['information_id','date','event_name'];
+            foreach($columns as $column){
+                $record->$column = $request->$column;
+            }
+    
+            $record->save();            
+    
+            return view('event_edit_complete',[
+            ]);
+        }
+
+
 
 
 
