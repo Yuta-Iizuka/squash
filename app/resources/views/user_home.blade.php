@@ -20,7 +20,7 @@
                         <a href="{{ route('gym.show', ['id' => $info['id']]) }}">施設詳細</a>
                     </td>
                     <td scope='col'>
-                        <a href="{{ route('gym.carender', ['id' => $info['id']]) }}">予約する</a>
+                        <a href="{{ route('user.carender', ['id' => $info['id']]) }}">予約する</a>
                     </td>
                 </tr>
                 @endforeach

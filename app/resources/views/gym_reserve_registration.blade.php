@@ -2,7 +2,7 @@
 @extends('layouts.layout')
 @section('content')
 <div class="container">
-    <h2> {{ $info->name}} </h2>
+    <h2> {{ $info->name }} </h2>
     <form action="{{route('reserve.store') }}" method="POST">
         @csrf
         <div class="form-group">

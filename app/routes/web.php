@@ -33,9 +33,9 @@ Route::group(['middleware' => 'auth'], function(){
         
         Route::get('/gym/{id}/show', [ReservationController::class, 'show'])->name('gym.show');
     
-        Route::get('/gym/{id}/carender', [ReservationController::class, 'carender'])->name('gym.carender');
+        Route::get('/user/{id}/carender', [ReservationController::class, 'carender'])->name('user.carender');
     
-        Route::post('/gym/{id}/reserve', [ReservationController::class, 'reserve'])->name('gym.reserve');
+        Route::post('/user/{id}/reserve', [ReservationController::class, 'reserve'])->name('user.reserve');
         Route::get('/user/{userId}/reserve/{infoId}/{date}/{term}', [ReservationController::class, 'createUserReserve'])->name('reserve.create.user');
     
         // マイページ
@@ -61,6 +61,16 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/event/{id}/edit', [ReservationController::class, 'eventEdit'])->name('event.edit');
         Route::post('/event/{id}/edit/complete', [ReservationController::class, 'eventEditComplete'])->name('event.edit.complete');
 
+        // 施設側予約
+        Route::get('/gym/{id}/carender', [ReservationController::class, 'gymCarender'])->name('gym.carender');
+        Route::post('/gym/{id}/reserve', [ReservationController::class, 'gymReserve'])->name('gym.reserve');
+        Route::get('/gym/{userId}/reserve/{infoId}/{date}/{term}', [ReservationController::class, 'createGymReserve'])->name('reserve.create.gym');
+        Route::post('/gym/reserve/complete', [ReservationController::class, 'reserveGymComplete'])->name('reserve.gym.complete');
+
+        // 施設が自分でした予約
+        Route::get('/gym/mypage' ,[ReservationController::class, 'gymMypage'])->name('gym.mypage');
+        Route::get('/check/{id}/carender', [ReservationController::class, 'checkCarender'])->name('check.carender');
+        Route::post('/check/{id}/reserve', [ReservationController::class, 'checkReserve'])->name('check.reserve');
 
 
 

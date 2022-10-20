@@ -37,7 +37,11 @@ class ReservationController extends Controller
             if(empty($user->info[0]->id)){
                 return view('gym_create_info');
             }else{
-                return view('gym_home');
+                $id = $user->info[0];
+
+                return view('gym_home',[
+                    'informations' => $id,
+                ]);
             }
             
         }else if($user->division == 2){
@@ -91,7 +95,7 @@ class ReservationController extends Controller
 
         $reserving->save();
 
-        return view('gym_reserve_complete');
+        return view('user_reserve_complete');
     }
 
     /**
@@ -160,7 +164,7 @@ class ReservationController extends Controller
         $all = Information::where('id', '=', $id)
                             ->first();
 
-        return view('gym_carender',[
+        return view('user_carender',[
             'info' => $all,
         ]);
     }
@@ -174,7 +178,7 @@ class ReservationController extends Controller
                             ->where('informations.id', '=', $id)
                             ->first();                  
 
-        return view('gym_reserve_list',[
+        return view('user_reserve_list',[
             'info' => $all,
             'terms' => config('const.term'),
             'date' => $date,
@@ -188,7 +192,7 @@ class ReservationController extends Controller
         $config_term = config('const.term');
       
 
-        return view('gym_reserve_registration',[
+        return view('user_reserve_registration',[
             'info' => $info,
             'userId' => $userId,
             'term' => $config_term[$term],
@@ -222,7 +226,7 @@ class ReservationController extends Controller
                             ->where('reserves.id', '=', $id)
                             ->first();                
 
-        return view('gym_reserve_delete',[
+        return view('user_reserve_delete',[
             'reservation' => $reserve,
             'reserve_id' => $id,
         ]);
@@ -234,7 +238,7 @@ class ReservationController extends Controller
         $reserve = Reserve::find($id);
 
         $reserve->delete();
-        return view('reserve_delete_complete');
+        return view('user_reserve_delete_complete');
     }
     
     // 施設の新規登録ページへ
@@ -375,9 +379,113 @@ class ReservationController extends Controller
             return view('event_edit_complete',[
             ]);
         }
+        //施設の予約のカレンダー表示 
+        public function gymCarender($id)
+        {
+    
+            $all = Information::where('id', '=', $id)
+                                ->first();
+    
+            return view('gym_carender',[
+                'info' => $all,
+            ]);
+        }
+        // 施設予約の時間表示
+        public function gymReserve(Request $request,$id)
+        {
+            $date = $request['date'];
+            $all = Information::join('times', 'times.id', '=', 'informations.time_id')
+                                ->where('informations.id', '=', $id)
+                                ->first();                   
+    
+            return view('gym_reserve_list',[
+                'info' => $all,
+                'terms' => config('const.term'),
+                'date' => $date,
+                'id' => $id,
+            ]);
+        }
+
+        // 施設の予約確認ページへ
+        public function createGymReserve($userId, $id, $date, $term )
+        {
+            $user = Auth::user();
+            $info = Information::where('id',$id)->first();
+            $config_term = config('const.term');
+         
+    
+            return view('gym_reserve_registration',[
+                'info' => $info,
+                'userId' => $userId,
+                'term' => $config_term[$term],
+                'user' => $user,
+                'date' => $date,
+            ]);
+        }
 
 
+        public function reserveGymComplete(Request $request)
+        {
+            $reserving = new Reserve;
+    
+            $columns = ['information_id', 'date',  'user_id', 'name', 'tel', 'email', 'member','term'];
+            foreach($columns as $column){
+                 $reserving->$column = $request->$column;
+            }
+    
+            $reserving->save();
+    
+            return view('gym_reserve_complete');
+        }
 
+        //施設の人が自分で予約したもの
+        public function gymMypage()
+        {
+            $reserve = Reserve::where('user_id', '=', \Auth::user()->id)
+                                ->get();
+
+            $information= Information::join('reserves', 'reserves.information_id', '=', 'informations.id')
+                                        ->where('reserves.user_id', '=', \Auth::user()->id)
+                                        ->select('informations.name')
+                                        ->first();       
+
+            return view('user_mypage',[
+                'reservation' => $reserve,
+                'info' => $information,
+            ]);
+        }
+
+        public function checkCarender($id)
+        {
+    
+            $all = Information::where('id', '=', $id)
+                                ->first();
+    
+            return view('check_carender',[
+                'info' => $all,
+            ]);
+        }
+
+        public function checkReserve(Request $request,$id)
+        {
+            $date = $request['date'];
+            $all = Information::join('times', 'times.id', '=', 'informations.time_id')
+                                ->where('informations.id', '=', $id)
+                                ->first(); 
+                                
+            $reserve = Reserve::where('information_id', '=', $id)
+                                ->get()
+                                ->toArray();
+                                
+            var_dump($reserve);                    
+    
+            return view('check_reserve_list',[
+                'info' => $all,
+                'terms' => config('const.term'),
+                'date' => $date,
+                'id' => $id,
+            ]);
+        }
 
 
 }

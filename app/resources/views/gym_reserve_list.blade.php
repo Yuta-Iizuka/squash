@@ -15,7 +15,7 @@
                     @if($info->term_1 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_1','date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_1','date' => $date])}}">予約 {{ $id }}</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -26,7 +26,7 @@
                     @if($info->term_2 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_2', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_2', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -37,7 +37,7 @@
                     @if($info->term_3 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_3', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_3', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -48,7 +48,7 @@
                     @if($info->term_4 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_4', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_4', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -59,7 +59,7 @@
                     @if($info->term_5 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_5', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_5', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -70,7 +70,7 @@
                     @if($info->term_6 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_6', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_6', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -81,7 +81,7 @@
                     @if($info->term_7 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_7', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_7', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -92,7 +92,7 @@
                     @if($info->term_8 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_8', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_8', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -103,7 +103,7 @@
                     @if($info->term_9 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_9', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_9', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -114,7 +114,7 @@
                     @if($info->term_10 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_10', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_10', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -125,7 +125,7 @@
                     @if($info->term_11 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_11', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_11', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -136,7 +136,7 @@
                     @if($info->term_12 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_12', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_12', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
@@ -147,7 +147,7 @@
                     @if($info->term_13 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'infoId'=> $info->id, 'term'=> 'term_13', 'date' => $date])}}">予約</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_13', 'date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>
