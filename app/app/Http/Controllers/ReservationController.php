@@ -470,14 +470,18 @@ class ReservationController extends Controller
         {
             $date = $request['date'];
             $all = Information::join('times', 'times.id', '=', 'informations.time_id')
+                                ->join('reserves', 'reserves.information_id', '=', 'informations.id')
                                 ->where('informations.id', '=', $id)
+                                ->where('reserves.date', 'like', '%'.$date.'%')
                                 ->first(); 
+
+                                var_dump($all);
+                                            
+            // $reserve = Reserve::where('information_id', '=', $id)
+            //                     ->get()
+            //                     ->toArray();
                                 
-            $reserve = Reserve::where('information_id', '=', $id)
-                                ->get()
-                                ->toArray();
-                                
-            var_dump($reserve);                    
+// SELECT r.term FROM informations as i JOIN reserves as r ON i.id = r.information_id WHERE i.id = 6 AND date LIKE '%10%';                              
     
             return view('check_reserve_list',[
                 'info' => $all,

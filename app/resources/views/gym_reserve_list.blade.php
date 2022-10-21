@@ -2,7 +2,7 @@
 @extends('layouts.layout')
 @section('content')
     <div class="container">
-        <h2> 予約施設：{{ $info->name }} </h2>
+        <h2> 予約施設：{{ $info['name'] }} </h2>
         <h3> 予約日時： {{ $date }} </h3> 
             <table class='table'>
                 <tr>
@@ -15,7 +15,7 @@
                     @if($info->term_1 == 0)
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_1','date' => $date])}}">予約 {{ $id }}</a>
+                        <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_1','date' => $date])}}">予約</a>
                     </button></td>
                     @else
                     <td scope='col'>×</td>

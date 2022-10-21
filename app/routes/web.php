@@ -64,7 +64,7 @@ Route::group(['middleware' => 'auth'], function(){
         // 施設側予約
         Route::get('/gym/{id}/carender', [ReservationController::class, 'gymCarender'])->name('gym.carender');
         Route::post('/gym/{id}/reserve', [ReservationController::class, 'gymReserve'])->name('gym.reserve');
-        Route::get('/gym/{userId}/reserve/{infoId}/{date}/{term}', [ReservationController::class, 'createGymReserve'])->name('reserve.create.gym');
+        Route::get('/gym/{userId}/reserve/{id}/{date}/{term}', [ReservationController::class, 'createGymReserve'])->name('reserve.create.gym');
         Route::post('/gym/reserve/complete', [ReservationController::class, 'reserveGymComplete'])->name('reserve.gym.complete');
 
         // 施設が自分でした予約
