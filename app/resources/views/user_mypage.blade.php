@@ -14,7 +14,7 @@
                 </thead>
                     @foreach($reservation as $res)
                     <tr>
-                        <th scope='col'>{{ $info->name }}</th>
+                        <th scope='col'>{{ $res['name'] }}</th>
                         <th scope='col'>{{ $res['date']}}</th>
                         <th scope='col'>{{ $res['term']}}</th>
                         <th scope='col'>

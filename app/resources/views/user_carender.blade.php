@@ -14,8 +14,9 @@
                 <button type="submit" class="btn btn-primary">日付を選択する</button>
             </div>
         </form>
-        <a href="{{ url()->previous() }}" >戻る</a>
+        
         </div>
+        <a href="{{ url()->previous() }}" >戻る</a>
     </div>
 </body>
 </html>

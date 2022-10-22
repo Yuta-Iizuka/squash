@@ -8,7 +8,7 @@
         @csrf
         <div class="form-group">
             <!-- <label for="information_id">施設ID</label> -->
-            <input type="text" class="form-control" id="information_id" name="information_id" value="{{ $event['information_id'] }}" />
+            <input type="hidden" class="form-control" id="information_id" name="information_id" value="{{ $event['information_id'] }}" />
         </div>
         <div class="form-group">
             <label for="date">イベント日</label>

@@ -18,10 +18,10 @@
                         <th scope='col'>{{ $res['date']}}</th>
                         <th scope='col'>{{ $res['term']}}</th>
                         <th scope='col'>
-                            <a href="{{ route('reserve.delete', ['id' => $res['id']]) }}">キャンセル</a>
+                            <a href="{{ route('gym.reserve.delete', ['id' => $res['id']]) }}">キャンセル</a>
                         </th>
                         <th scope='col'>
-                            <a href="{{ route('reserve.edit', ['id' => $res['id']]) }}">変更</a>
+                            <a href="{{ route('gym.reserve.edit', ['id' => $res['id']]) }}">予約内容変更</a>
                         </th>
                 </tr>
                 @endforeach

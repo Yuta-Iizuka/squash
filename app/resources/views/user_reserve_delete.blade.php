@@ -25,7 +25,7 @@
         </div>
         <div class="form-group">
             <!-- <label for="idr">id</label> -->
-            <input type="text" class="form-control" id="id" name="id" value="{{ $reserve_id }}" readonly />            
+            <input type="hidden" class="form-control" id="id" name="id" value="{{ $reserve_id }}" readonly />            
         </div>
 
         <div class="text-right">

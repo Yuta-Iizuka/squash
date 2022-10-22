@@ -21,6 +21,8 @@ Route::group(['middleware' => 'auth','can:system-only'], function(){});
 // 全ユーザー
     Route::get('/gym/create', [ReservationController::class, 'gymCreate'])->name('gym.create');
     Route::post('/new/gym/create/info', [ReservationController::class, 'infoNewGymCreate'])->name('info.new.gym.create');
+    Route::post('/new/gym/create/info/time', [ReservationController::class, 'infoNewGymCreateTime'])->name('info.new.gym.create.time');
+    Route::post('/complete/{id}/time', [ReservationController::class, 'completeTime'])->name('complete.time');
 
     Route::resource('reserve', 'ReservationController');
 Route::group(['middleware' => 'auth'], function(){
@@ -36,7 +38,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/user/{id}/carender', [ReservationController::class, 'carender'])->name('user.carender');
     
         Route::post('/user/{id}/reserve', [ReservationController::class, 'reserve'])->name('user.reserve');
-        Route::get('/user/{userId}/reserve/{infoId}/{date}/{term}', [ReservationController::class, 'createUserReserve'])->name('reserve.create.user');
+        Route::get('/user/{userId}/reserve/{id}/{date}/{term}', [ReservationController::class, 'createUserReserve'])->name('reserve.create.user');
     
         // マイページ
         Route::get('/user/mypage' ,[ReservationController::class, 'userMypage'])->name('user.mypage');
@@ -72,8 +74,21 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/check/{id}/carender', [ReservationController::class, 'checkCarender'])->name('check.carender');
         Route::post('/check/{id}/reserve', [ReservationController::class, 'checkReserve'])->name('check.reserve');
 
+        // 施設側の予約キャンセル
+        Route::get('/gym/reserve/{id}/delete' ,[ReservationController::class, 'gymReserveDelete'])->name('gym.reserve.delete');
+        Route::post('/gym/delete/{id}/complete' ,[ReservationController::class, 'gymDdeleteComplete'])->name('gym.delete.complete');
 
+        // 施設側の予約編集
+        Route::get('/gym/reserve/{id}/edit' ,[ReservationController::class, 'gymReserveEdit'])->name('gym.reserve.edit');
+        Route::post('/gym/reserve/{id}/edit/complete' ,[ReservationController::class, 'gymReserveUpdate'])->name('gym.reserve.edit.complete');
 
+        // 営業時間登録
+        Route::get('/open/{id}/time', [ReservationController::class, 'openTime'])->name('open.time');
+        Route::post('/open/{id}/time/complete', [ReservationController::class, 'openTimeComplete'])->name('open.time.complete');
+
+        // 施設情報編集
+        Route::get('/info/{id}/edit', [ReservationController::class, 'infoEdit'])->name('info.edit');
+        Route::post('/info/{id}/edit/complete', [ReservationController::class, 'infoEditComplete'])->name('info.edit.complete');
 
 });
 
