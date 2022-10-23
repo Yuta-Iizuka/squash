@@ -14,9 +14,9 @@ use App\Http\Controllers\ReservationController;
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth','can:user-higher'], function(){});
-Route::group(['middleware' => 'auth','can:admin-higher'], function(){});
-Route::group(['middleware' => 'auth','can:system-only'], function(){});
+// Route::group(['middleware' => 'auth','can:user-higher'], function(){});
+// Route::group(['middleware' => 'auth','can:admin-higher'], function(){});
+// Route::group(['middleware' => 'auth','can:system-only'], function(){});
 
 // 全ユーザー
     Route::get('/gym/create', [ReservationController::class, 'gymCreate'])->name('gym.create');
@@ -29,7 +29,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 // ユーザー
 
-        Route::get('/' ,[ReservationController::class, 'index']);
+        Route::get('/' ,[ReservationController::class, 'index'])->name('index');
 
         Route::resource('reserve', 'ReservationController');
         
@@ -50,9 +50,15 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/reserve/{id}/edit/complete' ,[ReservationController::class, 'update'])->name('reserve.edit.complete');
 
         Route::get('/gym/home' ,[ReservationController::class, 'gymHome'])->name('gym.home');
+
         
+        // 管理者ページ
         Route::get('/admin/{id}/gym/order' ,[ReservationController::class, 'adminGymOrder'])->name('admin.gym.order');
         Route::post('/admin/{id}/gym/order/complete' ,[ReservationController::class, 'adminGymOrderComplete'])->name('admin.gym.order.complete');
+
+        Route::get('/admin/gym/list' ,[ReservationController::class, 'adminGymList'])->name('admin.gym.list');
+        Route::get('/admin/{id}/gym/detail' ,[ReservationController::class, 'adminGymDetail'])->name('admin.gym.detail');
+
 
         // 施設側イベント登録
         Route::get('/event/create', [ReservationController::class, 'eventCreate'])->name('event.create');
@@ -89,6 +95,15 @@ Route::group(['middleware' => 'auth'], function(){
         // 施設情報編集
         Route::get('/info/{id}/edit', [ReservationController::class, 'infoEdit'])->name('info.edit');
         Route::post('/info/{id}/edit/complete', [ReservationController::class, 'infoEditComplete'])->name('info.edit.complete');
+
+        // 画像追加
+        Route::get('/add/{id}/image', [ReservationController::class, 'addImage'])->name('add.image');
+
+
+
+        Route::get('/google/{id}/map', [ReservationController::class, 'googleMap'])->name('google.map');
+        Route::post('/upload/{id}/image', [ReservationController::class, 'upload'])->name('upload.image');
+        
 
 });
 

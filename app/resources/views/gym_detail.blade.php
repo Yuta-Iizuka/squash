@@ -2,6 +2,10 @@
 @extends('layouts.layout')
 @section('content') 
     <div class="container">
+        
+    @if(!empty($image))
+    <img src="{{ asset($image->path) }}">
+    @endif
         <table>
                 <?php foreach($info as $data):?>
                 <tr>
@@ -10,7 +14,7 @@
                 </tr>
                 <tr>
                     <th scope='col'>住所</th>
-                    <td scope='col'>{{ $data['prif']}}{{ $data['city']}}{{ $data['adress']}}</td>
+                    <td scope='col'>{{ $data['prif']}}{{ $data['city']}}{{ $data['adress']}} <a href="{{ route('google.map',['id' => $data['id']]) }}">Google Map</a></td>
                 </tr>
                 <tr>
                     <th scope='col'>最寄り駅</th>
@@ -39,6 +43,8 @@
         </table>
         <a href="{{ route('gym.carender', ['id' => $data['id']]) }}">予約する</a>
         <?php endforeach;?>
+
+        
 
     </div>
 </body>

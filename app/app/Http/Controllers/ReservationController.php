@@ -16,6 +16,8 @@ use App\Event;
 
 use App\Time;
 
+use App\Image;
+
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +29,7 @@ class ReservationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $id = Auth::id();
 
@@ -57,16 +59,36 @@ class ReservationController extends Controller
             ]);
         }else{
             unset($user);
-        }
+            $query = Information::query();
+
+            $keyword = $request->input('keyword');
             $all = $information
-                ->where('check_id', '=', 0)
-                ->get()
-                ->toArray();
-        
+                    ->where('check_id', '=', 0)
+                    ->get()
+                    ->toArray();
+
+
+            if (!empty($keyword)) {
+                $query->where('name', 'like', '%' . $keyword . '%')
+                        ->orWhere('station','like','%'.$keyword.'%')
+                        ->orWhere('prif','like','%'.$keyword.'%')
+                        ->orWhere('city','like','%'.$keyword.'%')
+                        ->orWhere('adress','like','%'.$keyword.'%')
+                        ->where('check_id', '=', 0)
+                        ->get()
+                        ->toArray();
+                $all = $query->orderByDesc('created_at')->paginate(5);        
+ 
+            }
+
+
+   
+
             return view('user_home',[
                 'informations' => $all,
+                'keyword' => $keyword,
             ]);
-
+        }
 
     }
 
@@ -110,10 +132,15 @@ class ReservationController extends Controller
     {
         $information= new Information;
 
-        $all = Information::where('id', '=', $id)->get()->toArray();
+        $all = Information::where('id', '=', $id)
+                            ->get()
+                            ->toArray();
+        $image = Image::where('information_id', '=', $id)
+                        ->first();
 
         return view('gym_detail',[
             'info' => $all,
+            'image' => $image,
         ]);
     }
 
@@ -386,6 +413,29 @@ class ReservationController extends Controller
         
         return view('admin_gym_order_complete');
     }
+
+    public function adminGymList()
+    {
+        $all = Information::where('check_id', '=', 0)
+                            ->get()
+                            ->toArray();
+
+        return view('admin_gym_list',[
+            'admin' => $all,
+        ]);
+    }
+
+    public function adminGymDetail($id)
+    {
+        $all = Information::where('id', '=', $id)
+                            ->get()
+                            ->toArray();
+
+        return view('admin_gym_detail',[
+            'info' => $all,
+        ]);
+    }
+
 
     public function eventCreate()
     {
@@ -715,6 +765,51 @@ class ReservationController extends Controller
     
         return view('gym_info_edit_complete');
     }
+
+        // 施設画像追加
+        public function addImage($id)
+        {
+            $information = Information::where('id', '=', $id)
+                                        ->first();
+            return view('add_image',[
+                'informations' => $information,
+            ]);
+        }
+
+        public function upload(Request $request,$id)
+        {
+            // ディレクトリ名
+            $dir = 'sample';  
+            // アップロードされたファイル名を取得
+            $file_name = $request->file('image')->getClientOriginalName();
+
+            // 取得したファイル名で保存
+            $request->file('image')->storeAs('public/' . $dir, $file_name);
+
+            // ファイル情報をDBに保存
+            $image = new Image();
+            $image->information_id = $id;
+            $image->name = $file_name;
+            $image->path = 'storage/' . $dir . '/' . $file_name;
+            $image->save();
+
+            return view('add_image_complete');
+        }
+
+
+
+    public function googleMap($id)
+    {
+        $info = Information::where('id','=', $id)
+                            ->get()
+                            ->toArray();
+
+        return view('google_map',[
+            'info' => $info,
+        ]);
+    }
+
+    
 
 
 

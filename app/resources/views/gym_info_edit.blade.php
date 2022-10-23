@@ -73,6 +73,7 @@
         <button type="submit" class="btn btn-primary">更新</button>
         </div>
     </form>
+    
     @endforeach
     </div>
     

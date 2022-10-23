@@ -1,8 +1,17 @@
 
-@extends('layouts.layout')
+@extends('layouts.layout_admin')
 @section('content')
     <div class="container">
         <h2>管理者専用ページ</h2><br>
+
+        <h3>メインメニュー</h3>
+            <div class="container">
+                <div class="list-group">
+                    <a href="{{ route('admin.gym.list')}}" class="list-group-item list-group-item-action">施設一覧</a>    
+                </div>
+            </div>
+        <br>
+        <br>
         <h3>申請があった施設一覧</h3>
 
         <table class='table'>
