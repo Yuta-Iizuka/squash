@@ -14,9 +14,6 @@ use App\Http\Controllers\ReservationController;
 
 Auth::routes();
 
-// Route::group(['middleware' => 'auth','can:user-higher'], function(){});
-// Route::group(['middleware' => 'auth','can:admin-higher'], function(){});
-// Route::group(['middleware' => 'auth','can:system-only'], function(){});
 
 // 全ユーザー
     Route::get('/gym/create', [ReservationController::class, 'gymCreate'])->name('gym.create');
@@ -109,3 +106,15 @@ Route::group(['middleware' => 'auth'], function(){
 
     // Route::post('/new/gym/create', [RegisterController::class, 'newGymCreate'])->name('new.gym.create');
    
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

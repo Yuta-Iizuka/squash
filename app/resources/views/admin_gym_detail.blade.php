@@ -9,7 +9,7 @@
                 </tr>
                 <tr>
                     <th scope='col'>住所</th>
-                    <td scope='col'>{{ $data['prif']}}{{ $data['city']}}{{ $data['adress']}}</td>
+                    <td scope='col'>{{ $data['prif']}}{{ $data['city']}}{{ $data['adress']}}<a href="{{ route('google.map',['id' => $data['id']]) }}">Google Map</a></td>
                 </tr>
                 <tr>
                     <th scope='col'>最寄り駅</th>

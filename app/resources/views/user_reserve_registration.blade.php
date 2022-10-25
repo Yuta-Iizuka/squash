@@ -48,7 +48,7 @@
         <button type="submit" class="btn btn-primary">送信</button>
         </div>
     </form>
-    <a href="{{ url()->previous() }}" >戻る</a>
+
     </div>
     
 </body>

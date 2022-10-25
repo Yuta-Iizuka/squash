@@ -2,9 +2,11 @@
 
 namespace App;
 
+use App\Notifications\PasswordResetNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use App\Information;
 
 class User extends Authenticatable
@@ -17,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'tel', 'password','division',
+        'name', 'email', 'tel', 'password','division','remember_token',
     ];
 
     /**
@@ -40,5 +42,16 @@ class User extends Authenticatable
 
     public function info(){
         return $this->belongsToMany('App\Information');
+    }
+
+        /**
+    * パスワードリセット通知の送信
+    *
+    * @param  string  $token
+    * @return void
+    */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new PasswordResetNotification($token));
     }
 }

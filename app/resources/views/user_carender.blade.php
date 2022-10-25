@@ -3,6 +3,19 @@
     <div class="container">
         <h2> {{ $info->name}} </h2>
         <div class="row mx-5">
+
+        <div class = 'panel-body'>
+            @if($errors->any())
+            <div class='alert alert-danger'>
+                <ul>
+                    @foreach($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif        
+        </div>
+        <br>
         <form action="{{route('user.reserve',['id' => $info['id']]) }}" method="POST">
             @csrf
             <div class="form-group">

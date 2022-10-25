@@ -18,6 +18,11 @@ use App\Time;
 
 use App\Image;
 
+use Carbon\Carbon;
+
+use App\Http\Requests\CreateData;
+
+
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +41,7 @@ class ReservationController extends Controller
         $information= new Information;
 
         $user = User::find($id);   
-        
+
         if($user->division == 1){
             if(empty($user->info[0]->id)){
                 return view('gym_create_info');
@@ -213,7 +218,7 @@ class ReservationController extends Controller
 
 
 
-    public function reserve(Request $request,$id)
+    public function reserve(CreateData $request,$id)
     {
         $date = $request['date'];
         $event = Event::where('information_id', '=', $id)
@@ -269,11 +274,15 @@ class ReservationController extends Controller
 // ユーザーのマイページ（キャンセルできるところ）
     public function userMypage()
     {
+        $day=Carbon::yesterday();
         $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
                             ->where('user_id', '=', \Auth::user()->id)
                             ->select('reserves.id', 'informations.name', 'date', 'term')
-                            ->get();                
-
+                            ->where('date', '>=', $day)
+                            ->orderBy('date', 'asc')
+                            ->orderBy('term', 'asc')
+                            ->get();   
+                                        
         return view('user_mypage',[
             'reservation' => $reserve,
         ]);
@@ -334,7 +343,7 @@ class ReservationController extends Controller
         foreach($columns as $column){
             $info->$column = $request->$column;
         }
-
+ 
         $info->save();
 
         $info->user()->attach($user);
@@ -619,30 +628,41 @@ class ReservationController extends Controller
         public function checkReserve(Request $request,$id)
         {
             $date = $request['date'];
-            $all = Information::join('times', 'times.id', '=', 'informations.time_id')
-                                ->join('reserves', 'reserves.information_id', '=', 'informations.id')
-                                ->select('informations.id', 'reserves.term')
-                                ->where('informations.id', '=', $id)
-                                ->where('reserves.date', 'like', '%'.$date.'%')
-                                ->get()
-                                ->toArray(); 
-            $reserveTerm = [];
-            foreach($all as $t){
-                array_push($reserveTerm, $t['term']);
-            }
-                                                 
-            // $reserve = Reserve::where('information_id', '=', $id)
-            //                     ->get()
-            //                     ->toArray();
-                                
-// SELECT r.term FROM informations as i JOIN reserves as r ON i.id = r.information_id WHERE i.id = 6 AND date LIKE '%10%';                              
+
+            $event = Event::where('information_id', '=', $id)
+                                ->first();
     
-            return view('check_reserve_list',[
-                'info' => $reserveTerm,
-                'terms' => config('const.term'),
-                'date' => $date,
-                'id' => $id,
-            ]);
+            if($event->date == $date){
+                return view('cannot_reserve',[
+                    'date' => $date,
+                    'event' => $event
+                ]);
+            }else{
+                $all = Information::join('times', 'times.id', '=', 'informations.time_id')
+                                    ->join('reserves', 'reserves.information_id', '=', 'informations.id')
+                                    ->select('informations.id', 'reserves.term')
+                                    ->where('informations.id', '=', $id)
+                                    ->where('reserves.date', 'like', '%'.$date.'%')
+                                    ->get()
+                                    ->toArray(); 
+                $reserveTerm = [];
+                foreach($all as $t){
+                    array_push($reserveTerm, $t['term']);
+                }
+                                                    
+                // $reserve = Reserve::where('information_id', '=', $id)
+                //                     ->get()
+                //                     ->toArray();
+                                    
+    // SELECT r.term FROM informations as i JOIN reserves as r ON i.id = r.information_id WHERE i.id = 6 AND date LIKE '%10%';                              
+        
+                return view('check_reserve_list',[
+                    'info' => $reserveTerm,
+                    'terms' => config('const.term'),
+                    'date' => $date,
+                    'id' => $id,
+                ]);
+            } 
         }
 
         
@@ -800,9 +820,7 @@ class ReservationController extends Controller
 
     public function googleMap($id)
     {
-        $info = Information::where('id','=', $id)
-                            ->get()
-                            ->toArray();
+        $info = Information::find($id);
 
         return view('google_map',[
             'info' => $info,

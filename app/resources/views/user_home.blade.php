@@ -2,21 +2,16 @@
 @extends('layouts.layout')
 @section('content')
     <div class="container">
-        
+        <h2>予約施設一覧</h2>
 
-
-        <div class="col-sm-4 ">
+        <div class="col-auto my-3">
             <form class="form-inline" action="{{ route('index')}}">
-            <div class="form-group">
+            <div class="form-control-lg">
             <input type="text" name="keyword" value="{{$keyword}}" class="form-control" placeholder="検索">
             </div>
             <input type="submit" value="検索" class="btn btn-primary">
             </form>
         </div>
-
-
-
-        <h2>予約施設一覧</h2>
 
         <table class='table'>
             <thead>
@@ -46,7 +41,6 @@
                 </div>
                 @endif
         </table>
-            <a href="{{ route('user.mypage') }}">マイページへ</a>
     </div>
     
 </body>

@@ -2,6 +2,19 @@
 @section('content')
 <div class="container">
     <h2> 施設情報新規登録 </h2>
+
+    <div class = 'panel-body'>
+        @if($errors->any())
+        <div class='alert alert-danger'>
+            <ul>
+                @foreach($errors->all() as $message)
+                <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif        
+    </div>
+    
     <form action="{{ route('info.new.gym.create') }}" method="POST">
         @csrf
         <div class="form-group">
