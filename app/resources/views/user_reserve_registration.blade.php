@@ -26,26 +26,28 @@
             <input type="hidden" class="form-control" id="email" name="email" value="{{ $user->email }}" readonly/>
         </div>
         <div class="form-group">
-            <label for="date">予約日</label>
+            <label class="col-sm-2 col-form-label col-form-label-lg" for="date">予約日</label>
             <input type="hidden" class="form-control" id="date" name="date" value="{{ $date }}"/>
-            <div>{{ $date }}</div>
+            <h4>{{ $date }}</h4>
         </div>
         <div class="form-group">
-            <label for="term">予約時間</label>
+            <label class="col-sm-2 col-form-label col-form-label-lg" for="term">予約時間</label>
             <input type="hidden" class="form-control" id="term" name="term" value= "{{$term}}" readonly/>
-            <div>{{ $term }}</div>
+            <h4>{{ $term }}</h4>
         </div>
         <div class="form-group">
-            <label for="member">利用人数</label>
-            <select name="member">
+            <label class="col-sm-2 col-form-label col-form-label-lg" for="member">利用人数</label>
+            <div>
+            <select class="form-select form-select-lg mb-3" name="member">
                 @for($i=1; $i < 11; $i++)
                 <option value="{{ $i }}">{{ $i }}</option>
                 @endfor
-                </select>           
+            </select>  
+            </div>         
         </div>
 
-        <div class="text-right">
-        <button type="submit" class="btn btn-primary">送信</button>
+        <div class="text-left">
+        <button type="submit" class="btn btn-warning">予約する</button>
         </div>
     </form>
 

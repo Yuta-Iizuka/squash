@@ -1,8 +1,9 @@
-@extends('layouts.layout')
+@extends('layouts.layout_admin')
 @section('content')
 
-<h2>イベント一覧</h2>
+
 <div class="container">
+    
         <h3>イベント一覧</h3>
         <table class='table'>
             <thead>

@@ -25,20 +25,6 @@ class CreateData extends FormRequest
     {
         return [
             'date' => 'required|date',
- 
-            'prif' => 'required|prif',
-            'city' => 'required|city',
-            'adress' => 'required|adress',
-            'station' => 'required|station',
-            'access' => 'required|access',
-            'tel' => 'required|tel',
-            'holiday' => 'required|holiday',
-            'start_time' => 'required|start_time',
-            'end_time' => 'required|end_time',
-            'price' => 'required|price',
-            'lat' => 'required|lat',
-            'lng' => 'required|lng',
-
         ];
     }
 }

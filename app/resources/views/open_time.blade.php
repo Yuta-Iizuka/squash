@@ -1,5 +1,5 @@
 
-@extends('layouts.layout')
+@extends('layouts.layout_admin')
 @section('content')
     <div class="container">
         <h2> 営業時間</h2>

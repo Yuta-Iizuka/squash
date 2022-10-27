@@ -147,20 +147,7 @@ return [
     */
 
     'attributes' => [
-
-        'name' => '施設名',
-        'prif' => '都道府県',
-        'city' => '市区町村',
-        'adress' => 'その他住所',
-        'station' => '最寄り駅',
-        'access' => 'アクセス',
-        'tel' => '電話番号',
-        'holiday' => '定休日',
-        'start_time' => '開始時間',
-        'end_time' => '終了時間',
-        'price' => '料金',
-        'lat' => '緯度',
-        'lng' => '経度',
+        'date' => '日付'
     ],
 
 ];

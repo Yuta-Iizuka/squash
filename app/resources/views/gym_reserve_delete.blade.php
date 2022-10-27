@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('layouts.layout_admin')
 @section('content')
 <div class="container">
     <form action="{{route('gym.delete.complete', ['id' => $reserve_id]) }}" method="POST">
@@ -28,8 +28,8 @@
             <input type="hidden" class="form-control" id="id" name="id" value="{{ $reserve_id }}" readonly />            
         </div>
 
-        <div class="text-right">
-        <button type="submit" class="btn btn-primary">キャンセル</button>
+        <div class="text-left">
+        <button type="submit" class="btn btn-success">キャンセル</button>
        
     </form>
 </div>

@@ -15,9 +15,8 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_1','date' => $date])}}">予約</a>
-                    </button></td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_1','date' => $date])}}">予約</a>
+                    </td>
                     @endif
                 </tr>
                 <tr>
@@ -26,9 +25,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_2', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_2', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -37,9 +36,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_3', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_3', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -48,9 +47,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_4', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_4', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -59,9 +58,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_5', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_5', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -70,9 +69,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_6', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_6', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -81,9 +80,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_7', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_7', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -92,9 +91,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_8', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_8', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -103,9 +102,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_9', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_9', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -114,9 +113,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_10', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_10', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -125,9 +124,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_11', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_11', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -136,9 +135,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_12', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_12', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
                 <tr>
@@ -147,9 +146,9 @@
                     <td scope='col'>×</td>
                     @else
                     <td scope='col'>〇</td>
-                    <td><button type="button" class="btn btn-outline-primary">
-                        <a href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_13', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    <td>
+                        <a class="btn btn-warning" href="{{route('reserve.create.user',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_13', 'date' => $date])}}">予約</a>
+                    </td>    
                     @endif
                 </tr>
             </table>

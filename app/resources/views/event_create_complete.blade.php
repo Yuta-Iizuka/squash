@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('layouts.layout_admin')
 @section('content')
 <div class="container">
     <h3>イベントの登録が完了しました</h3>

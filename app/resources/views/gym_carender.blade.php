@@ -1,8 +1,8 @@
-@extends('layouts.layout')
+@extends('layouts.layout_admin')
 @section('content')
     <div class="container">
         <h2> {{ $info->name}} </h2>
-        <div class="row mx-5">
+        <div class="row p-sm-3">
         <form action="{{route('gym.reserve',['id' => $info['id']]) }}" method="POST">
             @csrf
             <div class="form-group">
@@ -11,7 +11,7 @@
             </div>
 
             <div class="text-right">
-                <button type="submit" class="btn btn-primary">日付を選択する</button>
+                <button type="submit" class="btn btn-success">日付を選択する</button>
             </div>
         </form>
         

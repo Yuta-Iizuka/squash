@@ -1,8 +1,9 @@
-@extends('layouts.layout')
+@extends('layouts.layout_admin')
 @section('content')
 
-<h2>イベント日編集</h2>
+
 <div class="container">
+<h2>イベント日編集</h2>
     @foreach($events as $event)
     <form action="{{route('event.edit.complete',['id' => $event['id']]) }}" method="POST">
         @csrf
@@ -19,7 +20,7 @@
             <input type="text" class="form-control" id="event_name" name="event_name"  value="{{ $event['event_name'] }}"/>
         </div>
         <div class="text-right">
-        <button type="submit" class="btn btn-primary">更新</button>
+        <button type="submit" class="btn btn-success">更新</button>
        
     </form>
     @endforeach

@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('layouts.layout_admin')
 @section('content')
 <div class="container">
     <h2> 施設情報編集 </h2>

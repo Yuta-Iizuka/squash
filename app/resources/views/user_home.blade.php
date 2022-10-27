@@ -27,10 +27,10 @@
                     <td scope='col'>{{ $info['access']}}</td>
                     <td scope='col'>{{ $info['start_time']}}~{{ $info['end_time']}}</td>
                     <td scope='col'>
-                        <a href="{{ route('gym.show', ['id' => $info['id']]) }}">施設詳細</a>
+                        <a class="btn btn-success" href="{{ route('gym.show', ['id' => $info['id']]) }}">施設詳細</a>
                     </td>
                     <td scope='col'>
-                        <a href="{{ route('user.carender', ['id' => $info['id']]) }}">予約する</a>
+                        <a class="btn btn-warning" href="{{ route('user.carender', ['id' => $info['id']]) }}">予約する</a>
                     </td>
                 </tr>
 

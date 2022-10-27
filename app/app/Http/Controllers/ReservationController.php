@@ -649,6 +649,9 @@ class ReservationController extends Controller
                 foreach($all as $t){
                     array_push($reserveTerm, $t['term']);
                 }
+                $term_info = Information::join('times', 'times.id', '=', 'informations.time_id')
+                ->where('informations.id', '=', $id)
+                ->first();
                                                     
                 // $reserve = Reserve::where('information_id', '=', $id)
                 //                     ->get()
@@ -661,6 +664,7 @@ class ReservationController extends Controller
                     'terms' => config('const.term'),
                     'date' => $date,
                     'id' => $id,
+                    'term_info' => $term_info,
                 ]);
             } 
         }

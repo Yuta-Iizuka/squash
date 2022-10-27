@@ -79,7 +79,7 @@ Route::group(['middleware' => 'auth'], function(){
 
         // 施設側の予約キャンセル
         Route::get('/gym/reserve/{id}/delete' ,[ReservationController::class, 'gymReserveDelete'])->name('gym.reserve.delete');
-        Route::post('/gym/delete/{id}/complete' ,[ReservationController::class, 'gymDdeleteComplete'])->name('gym.delete.complete');
+        Route::post('/gym/delete/{id}/complete' ,[ReservationController::class, 'gymDeleteComplete'])->name('gym.delete.complete');
 
         // 施設側の予約編集
         Route::get('/gym/reserve/{id}/edit' ,[ReservationController::class, 'gymReserveEdit'])->name('gym.reserve.edit');

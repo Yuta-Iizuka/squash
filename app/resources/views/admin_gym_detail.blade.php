@@ -1,15 +1,17 @@
 @extends('layouts.layout_admin')
 @section('content') 
-    <div class="container">
-        <table>
-                <?php foreach($info as $data):?>
+<div class="container">
+    <?php foreach($info as $data):?>
+        <h3>  {{ $data['name'] }} </h3> 
+        
+        <table class="table  table-striped">
                 <tr>
                     <th scope='col'>施設名</th>
                     <td scope='col'>{{ $data['name']}}</td>
                 </tr>
                 <tr>
                     <th scope='col'>住所</th>
-                    <td scope='col'>{{ $data['prif']}}{{ $data['city']}}{{ $data['adress']}}<a href="{{ route('google.map',['id' => $data['id']]) }}">Google Map</a></td>
+                    <td scope='col'>{{ $data['prif']}}{{ $data['city']}}{{ $data['adress']}} <a href="{{ route('google.map',['id' => $data['id']]) }}">  Google Map</a></td>
                 </tr>
                 <tr>
                     <th scope='col'>最寄り駅</th>
