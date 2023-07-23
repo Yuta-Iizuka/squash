@@ -1,9 +1,9 @@
 @extends('layouts.layout_admin')
-@section('content') 
+@section('content')
 <div class="container">
     <?php foreach($info as $data):?>
-        <h3>  {{ $data['name'] }} </h3> 
-        
+        <h3>  {{ $data['name'] }} </h3>
+
         <table class="table  table-striped">
                 <tr>
                     <th scope='col'>施設名</th>
@@ -36,7 +36,7 @@
                 <tr>
                     <th scope='col'>利用料金</th>
                     <td scope='col'>{{ $data['price']}}</td>
-                </tr>        
+                </tr>
         </table>
         <?php endforeach;?>
 
@@ -44,4 +44,4 @@
 </body>
 </html>
 
-@endsection    
+@endsection

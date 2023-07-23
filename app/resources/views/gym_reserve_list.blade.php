@@ -1,9 +1,7 @@
-
-@extends('layouts.layout')
-@section('content')
-    <div class="container">
-        <h3> 予約日時： {{ $date }} </h3> 
-        <table class='table'>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+    <div class="container main-container">
+        <h3> 予約日時： {{ $date }} </h3>
+            <table class='table'>
                 <tr>
                     <th scope='col'>時間</th>
                     <th scope='col'>予約状況</th>
@@ -28,7 +26,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_2', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -39,7 +37,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_3', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -50,7 +48,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_4', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -61,7 +59,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_5', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -72,7 +70,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_6', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -83,7 +81,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_7', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -94,7 +92,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_8', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -105,7 +103,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_9', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -116,7 +114,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_10', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -127,7 +125,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_11', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -138,7 +136,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_12', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
                 <tr>
@@ -149,7 +147,7 @@
                     <td scope='col'>〇</td>
                     <td><button type="button" class="btn btn-outline-primary">
                         <a href="{{route('reserve.create.gym',['userId'=> Auth::user()->id, 'id'=> $id, 'term'=> 'term_13', 'date' => $date])}}">予約</a>
-                    </button></td>    
+                    </button></td>
                     @endif
                 </tr>
             </table>
@@ -158,4 +156,3 @@
 </body>
 </html>
 
-@endsection    

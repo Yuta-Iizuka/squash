@@ -1,0 +1,12 @@
+.main-container{
+    margin-top: 50px;
+}
+
+.reserve-botton{
+    margin-left: 100px;
+}
+
+.flex{
+    display: flex;
+    justify-content: space-between;
+}

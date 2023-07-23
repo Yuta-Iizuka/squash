@@ -3,32 +3,55 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Information;
-
 use App\Reserve;
-
 use App\User;
-
 use App\InformationUser;
-
 use App\Event;
-
 use App\Time;
-
 use App\Image;
-
 use Carbon\Carbon;
-
 use App\Http\Requests\CreateData;
-
-
+use App\Services\UserService;
+use App\Services\GymInformationService;
+use App\Services\ReserveService;
+use App\Services\ImageService;
+use App\Services\EventService;
+use App\Services\TimeService;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ReservationController extends Controller
 {
+    /**
+     * @var UserService
+     */
+    protected $userService;
+    protected $GymInformationService;
+    protected $ReserveService;
+    protected $ImageService;
+    protected $EventService;
+    protected $TimeService;
+
+
+    public function __construct(
+        UserService $userService,
+        GymInformationService $GymInformationService,
+        ReserveService $ReserveService,
+        ImageService $ImageService,
+        EventService $EventService,
+        TimeService $TimeService
+    )
+    {
+        $this->userService = $userService;
+        $this->GymInformationService = $GymInformationService;
+        $this->ReserveService = $ReserveService;
+        $this->ImageService = $ImageService;
+        $this->EventService = $EventService;
+        $this->TimeService = $TimeService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,63 +59,48 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
-        $id = Auth::id();
+        // ログインユーザーのID
+        $id = $this->userService->getUserId();
+        $users = $this->userService->getUser();
+        $information = $this->GymInformationService->getGymInformation();
 
-        $information= new Information;
-
-        $user = User::find($id);   
-
-        if($user->division == 1){
-            if(empty($user->info[0]->id)){
-                return view('gym_create_info');
-            }else{
-                $id = $user->info[0];
-
-                return view('gym_home',[
-                    'informations' => $id,
-                ]);
-            }
-            
-        }else if($user->division == 2){
-            $all = $information
-            ->where('check_id', '=', 1)
-            ->get()
-            ->toArray();
-
-            return view('admin_home',[
-                'admin' => $all,
-            ]);
-        }else{
-            unset($user);
-            $query = Information::query();
-
-            $keyword = $request->input('keyword');
-            $all = $information
-                    ->where('check_id', '=', 0)
-                    ->get()
-                    ->toArray();
-
-
-            if (!empty($keyword)) {
-                $query->where('name', 'like', '%' . $keyword . '%')
-                        ->orWhere('station','like','%'.$keyword.'%')
-                        ->orWhere('prif','like','%'.$keyword.'%')
-                        ->orWhere('city','like','%'.$keyword.'%')
-                        ->orWhere('adress','like','%'.$keyword.'%')
-                        ->where('check_id', '=', 0)
+        foreach($users as $user){
+            // ログインが施設の時
+            if($user->division == 1)
+            {
+                if(empty($user->info[0]->id))
+                {
+                    return view('gym_create_info');
+                }else{
+                    $id = $user->info[0];
+                    return view('gym_home',[
+                        'informations' => $id,
+                    ]);
+                }
+            // ログインが全体の管理者の時
+            }else if($user->division == 2){
+                $allInfo = $information
+                        ->where('check_id', '=', 1)
                         ->get()
                         ->toArray();
-                $all = $query->orderByDesc('created_at')->paginate(5);        
- 
+
+                return view('admin_home',[
+                    'admin' => $allInfo,
+                ]);
+            //ログインがユーザーの時
+            }else{
+                // 管理者が許可した施設のみ表示
+                $check_info = $this->GymInformationService->getCheckInfo($information);
+                $keyword = $request->input('keyword');
+                if (!empty($keyword)) {
+                    $check_info = $this->GymInformationService->getSearchInfo($keyword);
+                }
+
+                return view('user_home',[
+                    'informations' => $check_info,
+                    'keyword' => $keyword,
+                ]);
             }
-
-
-   
-
-            return view('user_home',[
-                'informations' => $all,
-                'keyword' => $keyword,
-            ]);
         }
 
     }
@@ -113,16 +121,10 @@ class ReservationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // 予約を保存する
     public function store(Request $request)
     {
-        $reserving = new Reserve;
-
-        $columns = ['information_id', 'date',  'user_id', 'name', 'tel', 'email', 'member','term'];
-        foreach($columns as $column){
-             $reserving->$column = $request->$column;
-        }
-
-        $reserving->save();
+        $this->ReserveService->userReserve($request);
 
         return view('user_reserve_complete');
     }
@@ -133,18 +135,14 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // 施設の詳細ページ
     public function show($id)
     {
-        $information= new Information;
-
-        $all = Information::where('id', '=', $id)
-                            ->get()
-                            ->toArray();
-        $image = Image::where('information_id', '=', $id)
-                        ->first();
+        $gymInformationId = $this->GymInformationService->getGymInformationId($id);
+        $image =$this->ImageService->getImage($id);
 
         return view('gym_detail',[
-            'info' => $all,
+            'info' => $gymInformationId,
             'image' => $image,
         ]);
     }
@@ -155,17 +153,16 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // 予約の編集ページへ
     public function edit($id)
     {
-        $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
-                            ->where('reserves.id', '=', $id)
-                            ->first();  
-        $user_id = Auth::user()->id;                
+        $reserve = $this->ReserveService->getReserveInfo($id);
+        $user_id = $this->userService->getUserId();
 
         return view('reserve_edit',[
-        'reservation' => $reserve,
-        'reserve_id' => $id,
-        'user_id' => $user_id,
+            'reservation' => $reserve,
+            'reserve_id' => $id,
+            'user_id' => $user_id,
         ]);
     }
 
@@ -178,20 +175,9 @@ class ReservationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $reserve = new Reserve;
-        $record = $reserve->find($id);
+        $this->ReserveService->userReserveUpdate($request,$id);
 
-
-        $columns = ['information_id', 'date',  'user_id', 'name', 'tel', 'email', 'member','term'];
-        foreach($columns as $column){
-            $record->$column = $request->$column;
-        }
-
-        $record->save();    
-
-        return view('reserve_edit_complete',[
- 
-            ]);
+        return view('reserve_edit_complete');
     }
 
     /**
@@ -204,15 +190,14 @@ class ReservationController extends Controller
     {
 
     }
-
+    // ユーザー予約時のカレンダー表示
     public function carender($id)
     {
-
-        $all = Information::where('id', '=', $id)
-                            ->first();
+        $gymInformationId = $this->GymInformationService->getGymInformationId($id);
 
         return view('user_carender',[
-            'info' => $all,
+            'info' => $gymInformationId,
+            'id'=> $id,
         ]);
     }
 
@@ -221,49 +206,40 @@ class ReservationController extends Controller
     public function reserve(CreateData $request,$id)
     {
         $date = $request['date'];
-        $event = Event::where('information_id', '=', $id)
-                            ->first();
+        $event = $this->EventService->getEvent($id);
 
+        // 施設がイベントで休日の場合
         if($event->date == $date){
             return view('cannot_reserve',[
                 'date' => $date,
                 'event' => $event
             ]);
-        }else{  
-            $all = Information::join('times', 'times.id', '=', 'informations.time_id')
-                                ->join('reserves', 'reserves.information_id', '=', 'informations.id')
-                                ->select('informations.id', 'reserves.term')
-                                ->where('informations.id', '=', $id)
-                                ->where('reserves.date', 'like', '%'.$date.'%')
-                                ->get()
-                                ->toArray(); 
-            $reserveTerm = [];
-            foreach($all as $t){
-                array_push($reserveTerm, $t['term']);
-            }          
+        }else{
+            $openTime = $this->GymInformationService->getOpenTime($id,$date);
+            $reserveTerm = $this->ReserveService->reserveTerm($openTime);
+            $term_info =  $this->GymInformationService->getTermInfo($id);
 
-            $term_info = Information::join('times', 'times.id', '=', 'informations.time_id')
-                        ->where('informations.id', '=', $id)
-                        ->first();
-
-            return view('user_reserve_list',[
-                'info' => $reserveTerm,
-                'terms' => config('const.term'),
-                'date' => $date,
-                'id' => $id,
-                'term_info' => $term_info,
+            return response()->json([
+                'form' => view('user_reserve_list',[
+                    'info' => $reserveTerm,
+                    'terms' => config('const.term'),
+                    'date' => $date,
+                    'id' => $id,
+                    'term_info' => $term_info,
+                ])->render()
             ]);
-        }    
+        }
     }
+
 
     public function createUserReserve($userId, $id, $date, $term )
     {
-        $user = Auth::user();
-        $info = Information::where('id',$id)->first();
+        $user = $this->userService->getUserId();
+        $info = $this->GymInformationService->getGymInformationId($id);
         $config_term = config('const.term');
 
         return view('user_reserve_registration',[
-            'info' => $info,
+            'infos' => $info,
             'userId' => $userId,
             'term' => $config_term[$term],
             'user' => $user,
@@ -275,14 +251,8 @@ class ReservationController extends Controller
     public function userMypage()
     {
         $day=Carbon::yesterday();
-        $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
-                            ->where('user_id', '=', \Auth::user()->id)
-                            ->select('reserves.id', 'informations.name', 'date', 'term')
-                            ->where('date', '>=', $day)
-                            ->orderBy('date', 'asc')
-                            ->orderBy('term', 'asc')
-                            ->get();   
-                                        
+        $reserve = $this->ReserveService->getMypageReserve($day);
+
         return view('user_mypage',[
             'reservation' => $reserve,
         ]);
@@ -291,26 +261,22 @@ class ReservationController extends Controller
     // ユーザーのマイページ→キャンセル確認へ
     public function reserveDelete($id)
     {
-
-        $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
-                            ->where('reserves.id', '=', $id)
-                            ->first();                
+        $reserve = $this->ReserveService->getReserveInfo($id);
 
         return view('user_reserve_delete',[
             'reservation' => $reserve,
             'reserve_id' => $id,
         ]);
     }
-    
-    // キャンセル実施
-    public function deleteComplete(Request $request,$id)
-    {
-        $reserve = Reserve::find($id);
 
-        $reserve->delete();
+    // キャンセル実施
+    public function deleteComplete($id)
+    {
+        $this->ReserveService->reserveDelete($id);
+
         return view('user_reserve_delete_complete');
     }
-    
+
     // 施設の新規登録ページへ
     public function gymCreate()
     {
@@ -320,14 +286,7 @@ class ReservationController extends Controller
     // 施設のユーザー新規登録
     public function newGymCreate(Request $request)
     {
-        $users = new User;
-
-        $columns = ['name', 'tel',  'email', 'password', 'division'];
-        foreach($columns as $column){
-            $users->$column = $request->$column;
-        }
-
-        $users->save();
+        $this->userService->newGymCreate($request);
 
         return view('gym_create_info');
     }
@@ -335,59 +294,20 @@ class ReservationController extends Controller
     // 施設情報の新規登録
     public function infoNewGymCreate(Request $request)
     {
-        $user = Auth::id();
-
-        $info = new Information;
-
-        $columns = ['event_id','time_id','name', 'prif','city','adress','station',  'access','tel', 'holiday', 'start_time','end_time','price','lat','lng','check_id',];
-        foreach($columns as $column){
-            $info->$column = $request->$column;
-        }
- 
-        $info->save();
-
-        $info->user()->attach($user);
+        $user = $this->userService->getGymId();
+        $info = $this->GymInformationService->newInfoCreate($user,$request);
 
         return view('gym_create_info_time',[
-        'terms' => config('const.term'),
-        'id' => $info,
+            'terms' => config('const.term'),
+            'id' => $info,
         ]);
     }
 
-    
+
     // 施設情報の営業時間新規登録
     public function completeTime(Request $request, $id)
     {
-
-        $time = new Time;
-
-        $columns = ['term_1','term_2', 'term_3', 'term_4', 'term_5', 'term_6', 'term_7', 'term_8', 'term_9', 'term_10', 'term_11', 'term_12', 'term_13', ];
-        foreach($columns as $column){
-        $time->$column = $request->$column;
-        }
-
-        $time->save(); 
-
-        $info_id = $time->id;
-        
-        $information = DB::table('informations')
-                            ->where('id', '=', $id)
-                            ->update([
-                                'time_id' => $info_id
-                                ]);
-
-        // $user = Auth::id();
-
-        // $info = new Information;
-
-        // $columns = ['event_id','time_id','name', 'prif','city','adress','station',  'access','tel', 'holiday', 'start_time','end_time','price','lat','lng','check_id',];
-        // foreach($columns as $column){
-        //     $info->$column = $request->$column;
-        // }
-
-        // $info->save();
-
-        // $info->user()->attach($user);
+        $this->TimeService->newTimeCreate($request,$id);
 
         return view('gym_create_complete',[
         ]);
@@ -405,95 +325,73 @@ class ReservationController extends Controller
     // 施設管理者のホーム→施設オーダーの詳細へ
     public function adminGymOrder($id)
     {
-        $all = Information::where('id', '=', $id)->get()->toArray();
+        $gymInformationId = $this->GymInformationService->getGymInformationId($id);
 
         return view('admin_gym_order',[
-            'admin' => $all,
+            'admin' => $gymInformationId,
         ]);
     }
 
     public function adminGymOrderComplete(Request $request,$id)
     {
-        $record = Information::find($id);
+        $this->GymInformationService->gymApproval($id);
 
-        $record->check_id = '0';
-
-        $record->save();
-        
         return view('admin_gym_order_complete');
     }
 
     public function adminGymList()
     {
-        $all = Information::where('check_id', '=', 0)
-                            ->get()
-                            ->toArray();
+        $getAllGymInfo =$this->GymInformationService->getAllGymInfo();
 
         return view('admin_gym_list',[
-            'admin' => $all,
+            'admin' => $getAllGymInfo,
         ]);
     }
 
     public function adminGymDetail($id)
     {
-        $all = Information::where('id', '=', $id)
-                            ->get()
-                            ->toArray();
+        $gymInformationId =$this->GymInformationService->getGymInformationId($id);
 
         return view('admin_gym_detail',[
-            'info' => $all,
+            'info' => $gymInformationId,
         ]);
     }
 
 
     public function eventCreate()
     {
-        $user = Auth::user();
-        $id = $user->info[0]->id;
-        $information = new Information;
+        $user = $this->userService->getUserId();
+        $id = $this->EventService->getEventId($user);
+        $information = $this->GymInformationService->getGymInformation();
         return view('event_create',[
             'id' => $id,
             'info' => $information,
         ]);
     }
-    
+
     public function eventCreateComplete(Request $request)
     {
-        $event = new Event;
+       $this->EventService->eventCreate($request);
 
-        $columns = ['information_id','date','event_name'];
-        foreach($columns as $column){
-            $event->$column = $request->$column;
-        }
-
-        $event->save();
-        
         return view('event_create_complete');
     }
 
     // イベント編集トップ
     public function eventList()
     {
-        $user = Auth::user();
-        $id = $user->info[0]->id;
-
-        $event = Event::where('information_id', '=', $id)
-                        ->get()
-                        ->toArray();
-       
+        $user = $this->userService->getUserId();
+        $id = $this->EventService->getEventId($user);
+        $event = $this->EventService->getEventList($id);
 
         return view('event_list',[
             'events' => $event,
-
         ]);
     }
 
         // イベント編集ページへ
         public function eventEdit($id)
         {
-            $event = Event::where('id', '=', $id)
-                            ->get()
-                            ->toArray();
+            $event =$this->EventService->getEventEdit($id);
 
              return view('event_edit',[
                 'events' => $event,
@@ -502,65 +400,44 @@ class ReservationController extends Controller
 
         public function eventEditComplete(Request $request,$id)
         {
-            $event = new Event;
-            $record = $event->find($id);
+            $this->EventService->eventSave($request,$id);
 
-            $columns = ['information_id','date','event_name'];
-            foreach($columns as $column){
-                $record->$column = $request->$column;
-            }
-    
-            $record->save();            
-    
             return view('event_edit_complete',[
             ]);
         }
-        //施設の予約のカレンダー表示 
+        //施設の予約のカレンダー表示
         public function gymCarender($id)
         {
-    
-            $all = Information::where('id', '=', $id)
-                                ->first();
-    
+            $gymInformationId = $this->GymInformationService->getGymInformationId($id);
+
             return view('gym_carender',[
-                'info' => $all,
+                'info' => $gymInformationId,
             ]);
         }
         // 施設予約の時間表示
         public function gymReserve(Request $request,$id)
         {
             $date = $request['date'];
-            $event = Event::where('information_id', '=', $id)
-                            ->first();
-              
+            $event = $this->EventService->getEvent($id);
+
             if($event->date == $date){
                 return view('cannot_reserve',[
                     'date' => $date,
                     'event' => $event
                 ]);
-            }else{   
-                $all = Information::join('times', 'times.id', '=', 'informations.time_id')
-                                    ->join('reserves', 'reserves.information_id', '=', 'informations.id')
-                                    ->select('informations.id', 'reserves.term')
-                                    ->where('informations.id', '=', $id)
-                                    ->where('reserves.date', 'like', '%'.$date.'%')
-                                    ->get()
-                                    ->toArray(); 
-                $reserveTerm = [];
-                foreach($all as $t){
-                array_push($reserveTerm, $t['term']);
-                }          
+            }else{
+                $openTime = $this->GymInformationService->getOpenTime($id,$date);
+                $reserveTerm = $this->ReserveService->reserveTerm($openTime);
+                $term_info =  $this->GymInformationService->getTermInfo($id);
 
-                $term_info = Information::join('times', 'times.id', '=', 'informations.time_id')
-                    ->where('informations.id', '=', $id)
-                    ->first();
-
-                return view('gym_reserve_list',[
-                'info' => $reserveTerm,
-                'terms' => config('const.term'),
-                'date' => $date,
-                'id' => $id,
-                'term_info' => $term_info,
+                return response()->json([
+                    'form' => view('gym_reserve_list',[
+                        'info' => $reserveTerm,
+                        'terms' => config('const.term'),
+                        'date' => $date,
+                        'id' => $id,
+                        'term_info' => $term_info,
+                    ])->render()
                 ]);
             }
         }
@@ -568,11 +445,10 @@ class ReservationController extends Controller
         // 施設の予約確認ページへ
         public function createGymReserve($userId, $id, $date, $term )
         {
-            $user = Auth::user();
-            $info = Information::where('id',$id)->first();
+            $user = $this->userService->getUserId();
+            $info = $this->GymInformationService->getGymInformationId($id);
             $config_term = config('const.term');
-         
-    
+
             return view('gym_reserve_registration',[
                 'info' => $info,
                 'userId' => $userId,
@@ -585,30 +461,18 @@ class ReservationController extends Controller
 
         public function reserveGymComplete(Request $request)
         {
-            $reserving = new Reserve;
-    
-            $columns = ['information_id', 'date',  'user_id', 'name', 'tel', 'email', 'member','term'];
-            foreach($columns as $column){
-                 $reserving->$column = $request->$column;
-            }
-    
-            $reserving->save();
-    
+            $this->ReserveService->userReserve($request);
+
             return view('gym_reserve_complete');
         }
 
         //施設の人が自分で予約したもの
-        public function gymMypage()
+        public function gymReserveList()
         {
-            $reserve = Reserve::where('user_id', '=', \Auth::user()->id)
-                                ->get();
+            $reserve = $this->ReserveService->getReserveList();
+            $information = $this->GymInformationService->getGymInformationList();
 
-            $information= Information::join('reserves', 'reserves.information_id', '=', 'informations.id')
-                                        ->where('reserves.user_id', '=', \Auth::user()->id)
-                                        ->select('informations.name')
-                                        ->first();       
-
-            return view('gym_mypage',[
+            return view('gym_reserve_list_schedule',[
                 'reservation' => $reserve,
                 'info' => $information,
             ]);
@@ -616,74 +480,56 @@ class ReservationController extends Controller
 
         public function checkCarender($id)
         {
-    
-            $all = Information::where('id', '=', $id)
-                                ->first();
-    
+            $gymInformationId = $this->GymInformationService->getGymInformationId($id);
+
             return view('check_carender',[
-                'info' => $all,
+                'info' => $gymInformationId,
             ]);
         }
 
         public function checkReserve(Request $request,$id)
         {
             $date = $request['date'];
+            $event = $this->EventService->getEvent($id);
 
-            $event = Event::where('information_id', '=', $id)
-                                ->first();
-    
             if($event->date == $date){
                 return view('cannot_reserve',[
                     'date' => $date,
                     'event' => $event
                 ]);
             }else{
-                $all = Information::join('times', 'times.id', '=', 'informations.time_id')
-                                    ->join('reserves', 'reserves.information_id', '=', 'informations.id')
-                                    ->select('informations.id', 'reserves.term')
-                                    ->where('informations.id', '=', $id)
-                                    ->where('reserves.date', 'like', '%'.$date.'%')
-                                    ->get()
-                                    ->toArray(); 
-                $reserveTerm = [];
-                foreach($all as $t){
-                    array_push($reserveTerm, $t['term']);
-                }
-                $term_info = Information::join('times', 'times.id', '=', 'informations.time_id')
-                ->where('informations.id', '=', $id)
-                ->first();
-                                                    
-                // $reserve = Reserve::where('information_id', '=', $id)
-                //                     ->get()
-                //                     ->toArray();
-                                    
-    // SELECT r.term FROM informations as i JOIN reserves as r ON i.id = r.information_id WHERE i.id = 6 AND date LIKE '%10%';                              
-        
-                return view('check_reserve_list',[
-                    'info' => $reserveTerm,
-                    'terms' => config('const.term'),
-                    'date' => $date,
-                    'id' => $id,
-                    'term_info' => $term_info,
+                $openTime = $this->GymInformationService->getOpenTime($id,$date);
+                $reserveTerm = $this->ReserveService->reserveTerm($openTime);
+                $term_info =  $this->GymInformationService->getTermInfo($id);
+
+                // Todo bladeをAjax用に編集する
+                return response()->json([
+                    'form' => view('check_reserve_list',[
+                        'info' => $reserveTerm,
+                        'terms' => config('const.term'),
+                        'date' => $date,
+                        'id' => $id,
+                        'term_info' => $term_info,
+                    ])->render()
                 ]);
-            } 
+            }
         }
 
-        
+
     // gym側のマイページ→キャンセル確認へ
     public function gymReserveDelete($id)
     {
 
         $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
                             ->where('reserves.id', '=', $id)
-                            ->first();                
+                            ->first();
 
         return view('gym_reserve_delete',[
             'reservation' => $reserve,
             'reserve_id' => $id,
         ]);
     }
-    
+
     // gym側のキャンセル実施
     public function gymDeleteComplete(Request $request,$id)
     {
@@ -698,9 +544,9 @@ class ReservationController extends Controller
     {
         $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
                             ->where('reserves.id', '=', $id)
-                            ->first();   
-        $user_id = Auth::user()->id;  
-        
+                            ->first();
+        $user_id = Auth::user()->id;
+
         return view('gym_reserve_edit',[
         'reservation' => $reserve,
         'reserve_id' => $id,
@@ -719,10 +565,10 @@ class ReservationController extends Controller
             $record->$column = $request->$column;
         }
 
-        $record->save();    
+        $record->save();
 
         return view('gym_reserve_edit_complete',[
- 
+
             ]);
     }
 
@@ -753,9 +599,9 @@ class ReservationController extends Controller
             $record->$column = $request->$column;
         }
 
-        $record->save(); 
+        $record->save();
 
-    
+
         return view('open_time_complete');
     }
 
@@ -786,29 +632,35 @@ class ReservationController extends Controller
         }
 
         $record->save();
-    
+
         return view('gym_info_edit_complete');
     }
 
-        // 施設画像追加
+        // 施設画像追加ページ
         public function addImage($id)
         {
             $information = Information::where('id', '=', $id)
                                         ->first();
+
+            $image = Image::where('information_id', '=', $id)
+            ->get();
+
             return view('add_image',[
                 'informations' => $information,
+                'image' => $image,
             ]);
         }
 
+         // 施設画像処理
         public function upload(Request $request,$id)
         {
             // ディレクトリ名
-            $dir = 'sample';  
+            $dir = 'sample';
             // アップロードされたファイル名を取得
-            $file_name = $request->file('image')->getClientOriginalName();
+            $file_name = $request->file('file')->getClientOriginalName();
 
             // 取得したファイル名で保存
-            $request->file('image')->storeAs('public/' . $dir, $file_name);
+            $request->file('file')->storeAs('public/' . $dir, $file_name);
 
             // ファイル情報をDBに保存
             $image = new Image();
@@ -817,8 +669,34 @@ class ReservationController extends Controller
             $image->path = 'storage/' . $dir . '/' . $file_name;
             $image->save();
 
-            return view('add_image_complete');
+
+            return back()->withInput();
         }
+
+        public function delete($id, $infoId)
+        {
+            $dir = 'sample';
+            $name = Image::where('id', '=', $id)
+                            ->select('name')
+                            ->first();
+            $delete = '/public/sample/' .$name->name;
+            Storage::delete($delete);
+
+            $image = Image::where('id', '=', $id)
+                    ->delete();
+
+            $information = Information::where('id', '=', $infoId)
+            ->first();
+
+            $image = Image::where('information_id', '=', $infoId)
+            ->get();
+
+            return view('add_image',[
+                'informations' => $information,
+                'image' => $image,
+            ])->with('message', '削除完了しました。');
+        }
+
 
 
 
@@ -831,7 +709,7 @@ class ReservationController extends Controller
         ]);
     }
 
-    
+
 
 
 

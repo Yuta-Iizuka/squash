@@ -42,8 +42,8 @@
                 @endif
         </table>
     </div>
-    
+
 </body>
 </html>
 
-@endsection    
+@endsection

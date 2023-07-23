@@ -22,9 +22,10 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/common.css') }}">
 
 
     </head>
@@ -52,7 +53,7 @@
                     <script>
                         document.getElementById('logout').addEventListener('click', function(event) {
                         event.preventDefault();
-                        document.getElementById('logout-form').submit();    
+                        document.getElementById('logout-form').submit();
                         });
                      </script>
                 @else
@@ -60,7 +61,7 @@
                     /
                     <a class="my-navbar-item" href="{{ route('register') }}">会員登録</a>
                 @endif
-            </div>      
+            </div>
 
             </div>
         </div>

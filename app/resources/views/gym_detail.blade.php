@@ -1,20 +1,24 @@
 
 @extends('layouts.layout')
-@section('content') 
+@section('content')
     <div class="container">
     <?php foreach($info as $data):?>
-        <h3>  {{ $data['name'] }} </h3> 
-        
-    @if(!empty($image))
-    <div class="w-50 p-3">
-        <img  src="{{ asset($image->path) }}" class="img-fluid">
-    </div>
+        <h3>  {{ $data['name'] }} </h3>
 
-   
+     @if(!empty($image))
+    <div class="low">
+        <?php foreach($image as $images):?>
+                <div class="">
+                    <div class="col-md-4">
+                        <img  src="{{ asset($images->path) }}" class="img-fluid w-50 p-3 ">
+                    </div>
+                </div>
+        <?php endforeach;?>
+    </div>
     @endif
 
         <table class="table  table-striped">
-               
+
                 <tr>
                     <th scope='col'>施設名</th>
                     <td scope='col'>{{ $data['name']}}</td>
@@ -46,16 +50,14 @@
                 <tr>
                     <th scope='col'>利用料金</th>
                     <td scope='col'>{{ $data['price']}}</td>
-                </tr>        
+                </tr>
         </table>
 
             <a class="btn btn-warning btn-lg" href="{{ route('user.carender', ['id' => $data['id']]) }}" >予約する</a>
         <?php endforeach;?>
 
-        
-
     </div>
 </body>
 </html>
 
-@endsection    
+@endsection

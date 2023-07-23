@@ -22,10 +22,13 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    
+    <!-- <style type="text/css">
+        .jumbotron{ background-image:url("24735059_s.jpg");}
+    </style> -->
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/common.css') }}">
 
 </head>
 <body>
@@ -34,7 +37,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="http://127.0.0.1/">Home</a>
+                    <!-- <a class="navbar-brand" >
+                    <img src="/image/931166.jpg" alt="" width="30" height="30" class="d-inline-block align-text-top">
+                        Squash Reservation
+                    </a> -->
+                </li>
+                <li class="nav-item">
+                <a class="nav-link"  href="http://127.0.0.1/">Home</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" href="{{ route('user.mypage') }}">マイページ</a>
@@ -52,7 +61,7 @@
                     <script>
                         document.getElementById('logout').addEventListener('click', function(event) {
                         event.preventDefault();
-                        document.getElementById('logout-form').submit();    
+                        document.getElementById('logout-form').submit();
                         });
                      </script>
                 @else
@@ -60,7 +69,7 @@
                     /
                     <a class="my-navbar-item" href="{{ route('register') }}">会員登録</a>
                 @endif
-            </div>      
+            </div>
 
             </div>
         </div>

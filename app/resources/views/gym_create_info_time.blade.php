@@ -182,7 +182,7 @@
                 </tr>
 
             </table>
-            
+
             <div class="text-right">
                     <button type="submit" class="btn btn-primary">申請</button>
                 </div>
@@ -194,4 +194,4 @@
 </body>
 </html>
 
-@endsection    
+@endsection

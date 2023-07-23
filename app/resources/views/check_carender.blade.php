@@ -1,8 +1,8 @@
 @extends('layouts.layout_admin')
 @section('content')
     <div class="container">
-        <h2> {{ $info->name}} </h2>
-        
+        <h2> {{ $info['0']['name']}} </h2>
+
 
         <div class = 'panel-body'>
             @if($errors->any())
@@ -13,11 +13,11 @@
                     @endforeach
                 </ul>
             </div>
-            @endif        
+            @endif
         </div>
         <div class="row mx-5">
         <br>
-        <form action="{{route('check.reserve',['id' => $info['id']]) }}" method="POST">
+        <form action="{{route('check.reserve',['id' => $info['0']['id']]) }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="date">日付</label>
@@ -27,10 +27,10 @@
             <div class="text-right">
                 <button type="submit" class="btn btn-success">日付を選択する</button>
             </div>
-        </form>     
+        </form>
         </div>
     </div>
 </body>
 </html>
 
-@endsection    
+@endsection

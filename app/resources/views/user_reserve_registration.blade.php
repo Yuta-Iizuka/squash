@@ -2,12 +2,13 @@
 @extends('layouts.layout')
 @section('content')
 <div class="container">
-    <h2> {{ $info->name}} </h2>
+<?php foreach($infos as $info):?>
+    <h2> {{ $info['name']}} </h2>
     <form action="{{route('reserve.store') }}" method="POST">
         @csrf
         <div class="form-group">
             <!-- <label for="information_id">施設ID</label> -->
-            <input type="hidden" class="form-control" id="information_id" name="information_id" value="{{ $info->id }}" readonly/>
+            <input type="hidden" class="form-control" id="information_id" name="information_id" value="{{ $info['id'] }}" readonly/>
         </div>
         <div class="form-group">
             <!-- <label for="user_id">ユーザーID</label> -->
@@ -42,8 +43,8 @@
                 @for($i=1; $i < 11; $i++)
                 <option value="{{ $i }}">{{ $i }}</option>
                 @endfor
-            </select>  
-            </div>         
+            </select>
+            </div>
         </div>
 
         <div class="text-left">
@@ -52,8 +53,8 @@
     </form>
 
     </div>
-    
+<?php endforeach;?>
 </body>
 </html>
 
-@endsection    
+@endsection

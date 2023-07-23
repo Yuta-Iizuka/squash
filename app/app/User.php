@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use App\Information;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -54,4 +55,15 @@ class User extends Authenticatable
     {
         $this->notify(new PasswordResetNotification($token));
     }
+
+    /**
+    * ログインユーザーのidと一致した情報を取得する
+    *
+    * @param  string  $id
+    * @return void
+    */
+    // public function user($id)
+    // {
+    //     $this->Use;
+    // }
 }
