@@ -15,4 +15,8 @@ class Information extends Model
         return $this->belongsToMany('App\User');
     }
 
+    public function event(){
+        return $this->hasMany(Event::class, 'information_id', 'id' );
+    }
+
 }
