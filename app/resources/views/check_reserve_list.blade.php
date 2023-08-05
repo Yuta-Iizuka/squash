@@ -1,9 +1,7 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
+    <div class="container main-container">
 
-@extends('layouts.layout_admin')
-@section('content')
-    <div class="container">
-
-        <h3> 予約日時： {{ $date }} </h3> 
+        <h3> 予約日時： {{ $date }} </h3>
             <table class='table'>
                 <tr>
                     <th scope='col'>時間</th>
@@ -119,5 +117,3 @@
     </div>
 </body>
 </html>
-
-@endsection    

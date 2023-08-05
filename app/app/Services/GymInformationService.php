@@ -65,4 +65,14 @@ class GymInformationService
     {
         return $this->GymInformationRepository->getGymInformationList();
     }
+
+    public function editInformation($request,$id)
+    {
+        return $this->GymInformationRepository->editInformation($request,$id);
+    }
+
+    public function googleInfoId($id)
+    {
+        return $this->GymInformationRepository->googleInfoId($id);
+    }
 }

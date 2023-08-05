@@ -1,9 +1,49 @@
-@extends('layouts.layout_admin')
+@extends('layouts.layout')
 @section('content')
-    <div class="container">
-        <h2> {{ $info['0']['name']}} </h2>
 
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+<script>
+
+    $(function() {
+        $('.reserve').on('click', function() {
+            var id =  id ;//thanksを送りたい回答の主キー"id"
+            var date = $("#date").val();
+
+            $.ajax({
+
+                type: 'post',
+                url: "{{route('check.reserve',['id' => $info[0]['id']]) }}", // url: は読み込むURLを表す
+                // dataType: 'json', // 読み込むデータの種類を記入
+                data : {//③
+                    'id':id,
+                    'date':date
+                },
+                headers: {
+                // POSTのときはトークンの記述がないと"419 (unknown status)"になるので注意
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+
+            }).done(function(data){
+                $('#ajax_result').html(data['form']);
+            }).fail(function(XMLHttpRequest, textStatus, errorThrown){
+                alert('日付を選択してください');
+                console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+                console.log("textStatus     : " + textStatus);
+                console.log("errorThrown    : " + errorThrown.message);
+            });
+            }
+        );
+    });
+</script>
+<div class="container">
+        <h2> {{ $info[0]['name'] }} </h2>
+        <div class="d-flex justify-content-end">
+            <a href="{{ route('index') }}" class="btn btn-info">戻る</a>
+        </div>
         <div class = 'panel-body'>
             @if($errors->any())
             <div class='alert alert-danger'>
@@ -15,21 +55,21 @@
             </div>
             @endif
         </div>
-        <div class="row mx-5">
-        <br>
-        <form action="{{route('check.reserve',['id' => $info['0']['id']]) }}" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="date">日付</label>
+        <div class="row p-sm-3 d-flex justify-content-start">
+            <div class="">
                 <input type="date" class="form-control" id="date" name="date" value="" />
             </div>
-
-            <div class="text-right">
-                <button type="submit" class="btn btn-success">日付を選択する</button>
+            <div class="reserve-botton">
+                <button type="submit" id="button" class="btn btn-warning reserve">予約状況を表示する</button>
             </div>
-        </form>
+            <div class="reserve-botton">
+
+            </div>
         </div>
     </div>
+
+    <div id="ajax_result"></div>
+
 </body>
 </html>
 

@@ -18,4 +18,8 @@ class TimeService
         return $this->TimeRepository->newTimeCreate($request,$id);
     }
 
+    public function updateTime($request,$id)
+    {
+        return $this->TimeRepository->updateTime($request,$id);
+    }
 }

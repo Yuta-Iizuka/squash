@@ -23,7 +23,7 @@
                     <div class="col-md-4">
                         <img  src="{{ asset($images->path) }}" class="img-fluid w-50 p-3 ">
                     </div>
-                    <form method="POST" action="{{ route('delete.image',['id' => $images['id'], 'infoId' => $informations['id']] ) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('delete.image',['id' => $images['id'], 'infoId' => $informations[0]['id']] ) }}" enctype="multipart/form-data">
                         @csrf
                         <button type="submit" class="btn btn-primary">削除</button>
                     </form>
@@ -32,7 +32,7 @@
     </div>
     @endif
 
-    <form method="POST" action="{{ route('upload.image',['id' => $informations['id']]) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('upload.image',['id' => $informations[0]['id']]) }}" enctype="multipart/form-data">
         @csrf
         <input type="file" name="file" required>
         <button type="submit" class="btn btn-primary" >アップロード</button>

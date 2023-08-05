@@ -502,7 +502,6 @@ class ReservationController extends Controller
                 $reserveTerm = $this->ReserveService->reserveTerm($openTime);
                 $term_info =  $this->GymInformationService->getTermInfo($id);
 
-                // Todo bladeをAjax用に編集する
                 return response()->json([
                     'form' => view('check_reserve_list',[
                         'info' => $reserveTerm,
@@ -519,10 +518,7 @@ class ReservationController extends Controller
     // gym側のマイページ→キャンセル確認へ
     public function gymReserveDelete($id)
     {
-
-        $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
-                            ->where('reserves.id', '=', $id)
-                            ->first();
+        $reserve = $this->ReserveService->getReserveInfo($id);
 
         return view('gym_reserve_delete',[
             'reservation' => $reserve,
@@ -531,21 +527,18 @@ class ReservationController extends Controller
     }
 
     // gym側のキャンセル実施
-    public function gymDeleteComplete(Request $request,$id)
+    public function gymDeleteComplete($id)
     {
-        $reserve = Reserve::find($id);
+       $this->ReserveService->reserveDelete($id);
 
-        $reserve->delete();
         return view('gym_reserve_delete_complete');
     }
 
 
     public function gymReserveEdit($id)
     {
-        $reserve = Reserve::join('informations', 'informations.id', '=', 'reserves.information_id')
-                            ->where('reserves.id', '=', $id)
-                            ->first();
-        $user_id = Auth::user()->id;
+        $reserve = $this->ReserveService->getReserveInfo($id);
+        $user_id = $this->userService->getUserId()->id;
 
         return view('gym_reserve_edit',[
         'reservation' => $reserve,
@@ -556,51 +549,25 @@ class ReservationController extends Controller
 
     public function gymReserveUpdate(Request $request, $id)
     {
-        $reserve = new Reserve;
-        $record = $reserve->find($id);
+        $this->ReserveService->userReserveUpdate($request,$id);
 
-
-        $columns = ['information_id', 'date',  'user_id', 'name', 'tel', 'email', 'member','term'];
-        foreach($columns as $column){
-            $record->$column = $request->$column;
-        }
-
-        $record->save();
-
-        return view('gym_reserve_edit_complete',[
-
-            ]);
+        return view('gym_reserve_edit_complete');
     }
 
 // 営業時間ページへ
     public function openTime($id)
     {
-        $all = Information::where('id', '=', $id)
-                            ->first();
-
-        $data = Time::join('informations', 'informations.time_id', '=', 'times.id')
-                    ->where('informations.id', '=', '$id')
-                    ->get();
+        $information = $this->GymInformationService->getGymInformationId($id);
 
         return view('open_time',[
             'terms' => config('const.term'),
-            'info' => $all,
+            'info' => $information,
         ]);
     }
 
     public function openTimeComplete(Request $request, $id)
     {
-        $time = new Time;
-
-        $record = $time->find($id);
-
-        $columns = ['term_1','term_2', 'term_3', 'term_4', 'term_5', 'term_6', 'term_7', 'term_8', 'term_9', 'term_10', 'term_11', 'term_12', 'term_13', ];
-        foreach($columns as $column){
-            $record->$column = $request->$column;
-        }
-
-        $record->save();
-
+        $this->TimeService->updateTime($request,$id);
 
         return view('open_time_complete');
     }
@@ -610,9 +577,7 @@ class ReservationController extends Controller
     // 施設情報編集
     public function infoEdit($id)
     {
-        $information = Information::where('id', '=', $id)
-                                    ->get()
-                                    ->toArray();
+        $information = $this->GymInformationService->getGymInformationId($id);
 
         return view('gym_info_edit',[
             'informations' => $information,
@@ -622,95 +587,52 @@ class ReservationController extends Controller
     // 施設情報編集完了
     public function infoEditComplete(Request $request, $id)
     {
-        $info = new Information;
 
-        $record = $info->find($id);
-
-        $columns = ['event_id','time_id','name', 'prif','city','adress','station', 'access','tel', 'holiday', 'start_time','end_time','price','lat','lng','check_id',];
-        foreach($columns as $column){
-            $record->$column = $request->$column;
-        }
-
-        $record->save();
+        $this->GymInformationService->editInformation($request,$id);
 
         return view('gym_info_edit_complete');
     }
 
-        // 施設画像追加ページ
-        public function addImage($id)
-        {
-            $information = Information::where('id', '=', $id)
-                                        ->first();
+    // 施設画像追加ページ
+    public function addImage($id)
+    {
+        $information = $this->GymInformationService->getGymInformationId($id);
+        $image = $this->ImageService->getImage($id);
 
-            $image = Image::where('information_id', '=', $id)
-            ->get();
+        return view('add_image',[
+            'informations' => $information,
+            'image' => $image,
+        ]);
+    }
 
-            return view('add_image',[
-                'informations' => $information,
-                'image' => $image,
-            ]);
-        }
+        // 施設画像処理
+    public function upload(Request $request,$id)
+    {
+        $this->ImageService->saveImage($request,$id);
 
-         // 施設画像処理
-        public function upload(Request $request,$id)
-        {
-            // ディレクトリ名
-            $dir = 'sample';
-            // アップロードされたファイル名を取得
-            $file_name = $request->file('file')->getClientOriginalName();
+        return back()->withInput();
+    }
 
-            // 取得したファイル名で保存
-            $request->file('file')->storeAs('public/' . $dir, $file_name);
+    public function delete($id, $infoId)
+    {
+        $this->ImageService->deleteImage($id);
 
-            // ファイル情報をDBに保存
-            $image = new Image();
-            $image->information_id = $id;
-            $image->name = $file_name;
-            $image->path = 'storage/' . $dir . '/' . $file_name;
-            $image->save();
+        $information = $this->GymInformationService->getGymInformationId($infoId);
+        $image = $this->ImageService->getImage($infoId);
 
-
-            return back()->withInput();
-        }
-
-        public function delete($id, $infoId)
-        {
-            $dir = 'sample';
-            $name = Image::where('id', '=', $id)
-                            ->select('name')
-                            ->first();
-            $delete = '/public/sample/' .$name->name;
-            Storage::delete($delete);
-
-            $image = Image::where('id', '=', $id)
-                    ->delete();
-
-            $information = Information::where('id', '=', $infoId)
-            ->first();
-
-            $image = Image::where('information_id', '=', $infoId)
-            ->get();
-
-            return view('add_image',[
-                'informations' => $information,
-                'image' => $image,
-            ])->with('message', '削除完了しました。');
-        }
-
-
-
+        return view('add_image',[
+            'informations' => $information,
+            'image' => $image,
+        ])->with('message', '削除完了しました。');
+    }
 
     public function googleMap($id)
     {
-        $info = Information::find($id);
+        $info = $this->GymInformationService->googleInfoId($id);
 
         return view('google_map',[
             'info' => $info,
         ]);
     }
-
-
-
-
 
 }

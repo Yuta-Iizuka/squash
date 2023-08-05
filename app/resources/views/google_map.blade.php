@@ -31,22 +31,22 @@
     function initMap() {
         let info = @json($info);
         let position = new google.maps.LatLng(info.lat,info.lng);
-        
+
         const map = new google.maps.Map(document.getElementById('map'), {
             center: position,
             zoom: 19
         });
-       
+
         const infoWindow = new google.maps.InfoWindow({
             content: "",
             disableAutoPan: true,
         });
-               
+
         const marker = new google.maps.Marker({
             position: position,
             map: map,
         });
-               
+
         marker.addListener("click", () => {
             infoWindow.setContent(info.name);
             infoWindow.open(map, marker);
@@ -62,4 +62,4 @@
 </body>
 </html>
 
-@endsection   
+@endsection

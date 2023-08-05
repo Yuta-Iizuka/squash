@@ -112,4 +112,23 @@ class GymInformationRepository
         return $information;
     }
 
+    public static function editInformation($request,$id)
+    {
+        $info = new Information;
+
+        $record = $info->find($id);
+
+        $columns = ['event_id','time_id','name', 'prif','city','adress','station', 'access','tel', 'holiday', 'start_time','end_time','price','lat','lng','check_id',];
+        foreach($columns as $column){
+            $record->$column = $request->$column;
+        }
+
+        $record->save();
+    }
+
+    public static function googleInfoId($id)
+    {
+        $info = Information::find($id);
+        return $info;
+    }
 }

@@ -4,7 +4,7 @@
     <div class="container">
         <h2> 営業時間</h2>
 
-        <form action="{{route('open.time.complete',['id' => $info['time_id']]) }}" method="POST">
+        <form action="{{route('open.time.complete',['id' => $info[0]['time_id']]) }}" method="POST">
         @csrf
             <table class='table'>
                 <tr>
@@ -182,7 +182,7 @@
                 </tr>
 
             </table>
-            
+
             <div class="text-right">
                     <button type="submit" class="btn btn-primary">申請</button>
                 </div>
@@ -194,4 +194,4 @@
 </body>
 </html>
 
-@endsection    
+@endsection
